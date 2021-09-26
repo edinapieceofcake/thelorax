@@ -17,20 +17,9 @@ android {
     compileSdkVersion 29
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
-    sourceSets {
-        main {
-            jni {
-                srcDirs 'src\\main\\jni', 'src\\main\\jniLlibs'
-            }
-        }
-    }
-}
-
-dependencies {
-    implementation project(path: ':openCVLibrary3415')
 }
 
 apply from: '../build.dependencies.gradle'

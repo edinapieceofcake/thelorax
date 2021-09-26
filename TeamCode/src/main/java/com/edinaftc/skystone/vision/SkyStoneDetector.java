@@ -1,16 +1,13 @@
 package com.edinaftc.skystone.vision;
 
-import com.edinaftc.library.vision.Overlay;
-import com.edinaftc.library.vision.Tracker;
-import com.edinaftc.library.vision.VisionCamera;
-
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvPipeline;
 
-public class SkyStoneDetector extends Tracker {
+public class SkyStoneDetector extends OpenCvPipeline {
     private Mat mat0;
     private Mat mat1;
     private Mat mat2;
@@ -23,16 +20,16 @@ public class SkyStoneDetector extends Tracker {
 
     private Scalar BLACK = new Scalar(0,0,0);
     private Scalar WHITE = new Scalar(255,255,255);
-    private Scalar RED = new Scalar(0, 0, 255);
+    private Scalar RED = new Scalar(255, 0, 0);
 
-    public double cx0 = 400;
-    public double cy0 = 400;
-    public double cx1 = 600;
-    public double cy1 = 400;
-    public double cx2 = 900;
-    public double cy2 = 400;
+    public double cx0 = 10;
+    public double cy0 = 140;
+    public double cx1 = 160;
+    public double cy1 = 140;
+    public double cx2 = 280;
+    public double cy2 = 140;
 
-    public double lineX = 110;
+    public double lineX = 10;
 
     private int r = 10;
     private int strokeWidth = 3;
@@ -40,12 +37,14 @@ public class SkyStoneDetector extends Tracker {
     private SkystoneLocation location = SkystoneLocation.right;
 
     @Override
-    public void init(VisionCamera camera) {
+    public Mat processFrame(Mat frame) {
+        Scalar s0 = WHITE;
+        Scalar s1 = WHITE;
+        Scalar s2 = WHITE;
+        double r0 = 10;
+        double r1 = 10;
+        double r2 = 10;
 
-    }
-
-    @Override
-    public synchronized void processFrame(Mat frame, double timestamp) {
         int h = frame.height();
         int w = frame.width();
 
@@ -87,34 +86,21 @@ public class SkyStoneDetector extends Tracker {
             location = SkystoneLocation.right;
         }
 
-
-    }
-
-    @Override
-    public synchronized void drawOverlay(Overlay overlay, int imageWidth, int imageHeight, boolean debug) {
-        Scalar s0 = WHITE;
-        Scalar s1 = WHITE;
-        Scalar s2 = WHITE;
-        double r0 = 10;
-        double r1 = 10;
-        double r2 = 10;
-
         if (location == SkystoneLocation.right) {
-            s2 = RED;
-            r2= 20;
+            Imgproc.circle(frame, new Point(cx0, cy0), 5, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx1, cy1), 5, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx2, cy2), 10, RED, Imgproc.FILLED);
         } else if (location == SkystoneLocation.left) {
-            s0 = RED;
-            r0 = 20;
+            Imgproc.circle(frame, new Point(cx0, cy0), 10, RED, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx1, cy1), 5, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx2, cy2), 5, WHITE, Imgproc.FILLED);
         } else {
-            s1 = RED;
-            r1 = 20;
+            Imgproc.circle(frame, new Point(cx0, cy0), 5, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx1, cy1), 10, RED, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx2, cy2), 5, WHITE, Imgproc.FILLED);
         }
 
-        overlay.fillCircle(new Point(cx0, cy0), r0, s0);
-        overlay.fillCircle(new Point(cx1, cy1), r1, s1);
-        overlay.fillCircle(new Point(cx2, cy2), r2, s2);
-
-        overlay.strokeLine(new Point(lineX,0), new Point(lineX,725),  new Scalar(51, 255, 51), 25);
+        return frame;
     }
 
     public SkystoneLocation getLocation() {
