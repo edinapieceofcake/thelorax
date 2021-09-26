@@ -22,17 +22,14 @@ public class SkyStoneDetector extends OpenCvPipeline {
     private Scalar WHITE = new Scalar(255,255,255);
     private Scalar RED = new Scalar(255, 0, 0);
 
-    public double cx0 = 10;
-    public double cy0 = 140;
-    public double cx1 = 160;
-    public double cy1 = 140;
-    public double cx2 = 280;
-    public double cy2 = 140;
+    public double cx0 = 240;
+    public double cy0 = 640;
+    public double cx1 = 480;
+    public double cy1 = 640;
+    public double cx2 = 720;
+    public double cy2 = 640;
 
-    public double lineX = 10;
-
-    private int r = 10;
-    private int strokeWidth = 3;
+    private int r = 30;
 
     private SkystoneLocation location = SkystoneLocation.right;
 
@@ -87,17 +84,17 @@ public class SkyStoneDetector extends OpenCvPipeline {
         }
 
         if (location == SkystoneLocation.right) {
-            Imgproc.circle(frame, new Point(cx0, cy0), 5, WHITE, Imgproc.FILLED);
-            Imgproc.circle(frame, new Point(cx1, cy1), 5, WHITE, Imgproc.FILLED);
-            Imgproc.circle(frame, new Point(cx2, cy2), 10, RED, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx0, cy0), r/2, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx1, cy1), r/2, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx2, cy2), r, RED, Imgproc.FILLED);
         } else if (location == SkystoneLocation.left) {
-            Imgproc.circle(frame, new Point(cx0, cy0), 10, RED, Imgproc.FILLED);
-            Imgproc.circle(frame, new Point(cx1, cy1), 5, WHITE, Imgproc.FILLED);
-            Imgproc.circle(frame, new Point(cx2, cy2), 5, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx0, cy0), r, RED, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx1, cy1), r/2, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx2, cy2), r/2, WHITE, Imgproc.FILLED);
         } else {
-            Imgproc.circle(frame, new Point(cx0, cy0), 5, WHITE, Imgproc.FILLED);
-            Imgproc.circle(frame, new Point(cx1, cy1), 10, RED, Imgproc.FILLED);
-            Imgproc.circle(frame, new Point(cx2, cy2), 5, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx0, cy0), r/2, WHITE, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx1, cy1), r, RED, Imgproc.FILLED);
+            Imgproc.circle(frame, new Point(cx2, cy2), r/2, WHITE, Imgproc.FILLED);
         }
 
         return frame;
