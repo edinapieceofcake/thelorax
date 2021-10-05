@@ -22,12 +22,12 @@ public class SkyStoneDetector extends OpenCvPipeline {
     private Scalar WHITE = new Scalar(255,255,255);
     private Scalar RED = new Scalar(255, 0, 0);
 
-    public double cx0 = 240;
-    public double cy0 = 640;
-    public double cx1 = 480;
-    public double cy1 = 640;
-    public double cx2 = 720;
-    public double cy2 = 640;
+    public double cx0 = 210;
+    public double cy0 = 460;
+    public double cx1 = 440;
+    public double cy1 = 460;
+    public double cx2 = 760;
+    public double cy2 = 460;
 
     private int r = 30;
 

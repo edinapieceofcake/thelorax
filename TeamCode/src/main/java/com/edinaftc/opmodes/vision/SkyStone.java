@@ -86,7 +86,7 @@ public class SkyStone extends OpMode {
     @Override
     public void loop() {
         _gamepad1.update();
-        if (_gamepad1.x) {
+        if (_gamepad1.b) {
             if (location == Location.left) {
                 skyStoneDetector.cx0 += 10;
             } else if (location == Location.middle) {
@@ -96,7 +96,7 @@ public class SkyStone extends OpMode {
             }
         }
 
-        if (_gamepad1.y) {
+        if (_gamepad1.x) {
             if (location == Location.left) {
                 skyStoneDetector.cx0 -= 10;
             } else if (location == Location.middle) {
@@ -106,7 +106,7 @@ public class SkyStone extends OpMode {
             }
         }
 
-        if (_gamepad1.b) {
+        if (_gamepad1.a) {
             if (location == Location.left) {
                 skyStoneDetector.cy0 += 10;
             } else if (location == Location.middle) {
@@ -116,7 +116,7 @@ public class SkyStone extends OpMode {
             }
         }
 
-        if (_gamepad1.a) {
+        if (_gamepad1.y) {
             if (location == Location.left) {
                 skyStoneDetector.cy0 -= 10;
             } else if (location == Location.middle) {
