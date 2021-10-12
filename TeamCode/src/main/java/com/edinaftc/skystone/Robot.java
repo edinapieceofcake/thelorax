@@ -1,5 +1,6 @@
 package com.edinaftc.skystone;
 
+import com.edinaftc.library.subsystems.Intake;
 import com.edinaftc.library.subsystems.MecanumDrive2;
 import com.edinaftc.library.subsystems.Subsystem;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -16,6 +17,8 @@ public class Robot {
     private boolean started;
 
     public MecanumDrive2 drive;
+
+    public Intake intake;
 
     private List<Subsystem> subsystems;
 
@@ -51,7 +54,14 @@ public class Robot {
         } catch (IllegalArgumentException e) {
 
         }
-        
+
+        try {
+            intake = new Intake(opMode.hardwareMap);
+            subsystems.add(intake);
+        } catch (IllegalArgumentException e) {
+
+        }
+
         subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
     }
 

@@ -30,6 +30,7 @@ public class TeleOp extends OpMode {
                 gamepad1.right_stick_x, gamepad2.left_trigger, gamepad2.right_trigger,
                 gamepad1.left_stick_button, gamepad1.right_stick_button);
 
+        robot.intake.solveDirection(gamepad1.left_bumper, gamepad1.right_bumper);
 
         telemetry.update();
     }
