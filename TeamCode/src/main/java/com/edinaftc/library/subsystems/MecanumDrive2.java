@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class MecanumDrive2 extends Subsystem{
 
     private DcMotorEx[] motors;
@@ -16,8 +19,6 @@ public class MecanumDrive2 extends Subsystem{
     private double leftStickX;
     private double leftStickY;
     private double rightStickY;
-    private double leftTrigger;
-    private double rightTrigger;
     private double driveStickSpeed = 1.0;
     private double rotationStickSpeed = 1.0;
 
@@ -38,19 +39,17 @@ public class MecanumDrive2 extends Subsystem{
         motors[3].setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void setVelocity(double leftStickX, double leftStickY, double rightStickY, double leftTrigger, double rightTrigger,
-                            boolean leftStickPressed, boolean rightStickPressed) {
+    public void setVelocity(double leftStickX, double leftStickY, double rightStickY,
+                            boolean leftStickPressed) {
         this.leftStickX = leftStickX;
         this.leftStickY = leftStickY;
         this.rightStickY = rightStickY;
-        this.leftTrigger = leftTrigger;
-        this.rightTrigger = rightTrigger;
 
-        if (leftStickPressed || rightStickPressed) {
+        if (leftStickPressed) {
             rotationStickSpeed = .7;
-            driveStickSpeed = 1;
+            driveStickSpeed = .7;
         } else {
-            driveStickSpeed = rotationStickSpeed = .4;
+            driveStickSpeed = rotationStickSpeed = .3;
         }
     }
 
@@ -60,27 +59,10 @@ public class MecanumDrive2 extends Subsystem{
         double rotation;
         double speed;
 
-        if (leftStickX != 0 || leftStickY != 0 || rightStickY != 0) {
-            x = Math.pow(-leftStickX, 3.0);
-            y = Math.pow(leftStickY, 3.0);
-            rotation = Math.pow(-rightStickY, 3.0) * rotationStickSpeed;
-            speed = Math.min(1.0, Math.sqrt(x * x + y * y)) * driveStickSpeed;
-        } else if (rightTrigger != 0) {
-            x = Math.pow(rightTrigger, 3.0);
-            y = 0;
-            rotation = 0;
-            speed = .4;
-        } else if (leftTrigger != 0) {
-            x = Math.pow(-leftTrigger, 3.0);
-            y = 0;
-            rotation = 0;
-            speed = .4;
-        } else {
-            x = 0;
-            y = 0;
-            rotation = 0;
-            speed = 0;
-        }
+        x = Math.pow(-leftStickX, 3.0);
+        y = Math.pow(leftStickY, 3.0);
+        rotation = Math.pow(-rightStickY, 3.0) * rotationStickSpeed;
+        speed = Math.min(1.0, Math.sqrt(x * x + y * y)) * driveStickSpeed;
 
         final double direction = Math.atan2(x, y);
 
@@ -88,6 +70,13 @@ public class MecanumDrive2 extends Subsystem{
         powers[3] = (speed * Math.cos(direction + Math.PI / 4.0) - rotation) * currentPower;
         powers[1] = (speed * Math.cos(direction + Math.PI / 4.0) + rotation) * currentPower;
         powers[2] = (speed * Math.sin(direction + Math.PI / 4.0) - rotation) * currentPower;
+
+        double max = Collections.max(Arrays.asList(1.0, Math.abs(powers[0]),
+                Math.abs(powers[1]), Math.abs(powers[2]), Math.abs(powers[3])));
+
+        for (int i = 0; i < 4; i++) {
+            powers[i] /= max;
+        }
 
         for (int i = 0; i < 4; i++) {
             motors[i].setPower(powers[i]);
@@ -100,6 +89,5 @@ public class MecanumDrive2 extends Subsystem{
         }
 
         telemetry.addData("x, y, r", "%f %f %f", leftStickX, leftStickY, rightStickY);
-        telemetry.addData("lt rt", "%f %f", leftTrigger, rightTrigger);
     }
 }

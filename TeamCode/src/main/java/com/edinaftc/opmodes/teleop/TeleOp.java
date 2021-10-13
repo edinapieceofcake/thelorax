@@ -1,6 +1,7 @@
 package com.edinaftc.opmodes.teleop;
 
 import com.edinaftc.library.Stickygamepad;
+import com.edinaftc.library.Vector2d;
 import com.edinaftc.skystone.Robot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
@@ -26,11 +27,11 @@ public class TeleOp extends OpMode {
         _gamepad1.update();
         _gamepad2.update();
 
-        robot.drive.setVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y,
-                gamepad1.right_stick_x, gamepad2.left_trigger, gamepad2.right_trigger,
-                gamepad1.left_stick_button, gamepad1.right_stick_button);
+        robot.drive.setVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_button);
 
         robot.intake.solveDirection(gamepad1.left_bumper, gamepad1.right_bumper);
+
+        robot.drive.displayTelemetry(telemetry);
 
         telemetry.update();
     }
