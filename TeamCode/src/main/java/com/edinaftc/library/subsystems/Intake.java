@@ -30,12 +30,18 @@ public class Intake extends Subsystem {
     }
 
     public void solveDirection(boolean leftBumper, boolean rightBumper){
-        _direction = Direction.Neither;
-
         if (leftBumper){
-            _direction = Direction.Counterclockwise;
+            if (_direction == Direction.Counterclockwise){
+                _direction = Direction.Neither;
+            } else {
+                _direction = Direction.Counterclockwise;
+            }
         } else if (rightBumper){
-            _direction = Direction.Clockwise;
+            if (_direction == Direction.Clockwise){
+                _direction = Direction.Neither;
+            } else {
+                _direction = Direction.Clockwise;
+            }
         }
     }
 }

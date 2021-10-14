@@ -29,7 +29,7 @@ public class TeleOp extends OpMode {
 
         robot.drive.setVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_button);
 
-        robot.intake.solveDirection(gamepad1.left_bumper, gamepad1.right_bumper);
+        robot.intake.solveDirection(_gamepad1.left_bumper, _gamepad1.right_bumper);
 
         robot.drive.displayTelemetry(telemetry);
 

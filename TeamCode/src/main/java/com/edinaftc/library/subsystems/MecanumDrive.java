@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class MecanumDrive2 extends Subsystem{
+public class MecanumDrive extends Subsystem{
 
     private DcMotorEx[] motors;
     public static final String[] MOTOR_NAMES = {"fl", "bl", "br", "fr"};
@@ -19,12 +19,12 @@ public class MecanumDrive2 extends Subsystem{
     private double leftStickX;
     private double leftStickY;
     private double rightStickY;
-    private double driveStickSpeed = 1.0;
-    private double rotationStickSpeed = 1.0;
+    private double driveStickSpeed = .8;
+    private double rotationStickSpeed = .8;
 
     private double currentPower = 1.4;
 
-    public MecanumDrive2(HardwareMap map) {
+    public MecanumDrive(HardwareMap map) {
         powers = new double[4];
         motors = new DcMotorEx[4];
 
@@ -46,10 +46,10 @@ public class MecanumDrive2 extends Subsystem{
         this.rightStickY = rightStickY;
 
         if (leftStickPressed) {
-            rotationStickSpeed = .7;
-            driveStickSpeed = .7;
+            rotationStickSpeed = .8;
+            driveStickSpeed = .8;
         } else {
-            driveStickSpeed = rotationStickSpeed = .3;
+            driveStickSpeed = rotationStickSpeed = .4;
         }
     }
 
