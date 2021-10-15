@@ -12,8 +12,9 @@ public class SpinServo extends LinearOpMode {
     @Override
     public void runOpMode()  throws InterruptedException{
 
-
-        servo = hardwareMap.servo.get("");
+        //what is name of the the button to press?
+        //What is name of the servo in robot for spin duck
+        servo = hardwareMap.servo.get("rightBumper");
         servo.setPosition(servoPos);
 
         waitForStart();
