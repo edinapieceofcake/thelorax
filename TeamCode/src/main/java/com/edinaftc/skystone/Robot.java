@@ -2,6 +2,7 @@ package com.edinaftc.skystone;
 
 import com.edinaftc.library.subsystems.Intake;
 import com.edinaftc.library.subsystems.MecanumDrive;
+import com.edinaftc.library.subsystems.SpinServo;
 import com.edinaftc.library.subsystems.Subsystem;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ThreadPool;
@@ -19,6 +20,8 @@ public class Robot {
     public MecanumDrive drive;
 
     public Intake intake;
+
+    public SpinServo servo;
 
     private List<Subsystem> subsystems;
 
@@ -61,6 +64,15 @@ public class Robot {
         } catch (IllegalArgumentException e) {
 
         }
+
+        try {
+            servo = new SpinServo(opMode.hardwareMap);
+            subsystems.add(servo);
+        } catch (IllegalArgumentException e) {
+
+        }
+
+
 
         subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
     }

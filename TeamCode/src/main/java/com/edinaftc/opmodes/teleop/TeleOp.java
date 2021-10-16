@@ -31,6 +31,8 @@ public class TeleOp extends OpMode {
 
         robot.intake.solveDirection(_gamepad1.left_bumper, _gamepad1.right_bumper);
 
+        robot.servo.spin(_gamepad2.left_bumper, _gamepad2.right_bumper);
+
         robot.drive.displayTelemetry(telemetry);
 
         telemetry.update();
