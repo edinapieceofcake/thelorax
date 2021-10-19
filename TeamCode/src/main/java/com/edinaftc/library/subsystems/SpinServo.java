@@ -1,6 +1,7 @@
 package com.edinaftc.library.subsystems;
 
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -14,24 +15,26 @@ public class SpinServo extends Subsystem {
     double position = (maxPosition-minPosition)/2;
     boolean isSpeedIncreasing = true;
      Servo servo;
+     CRServo continuousServo;
      boolean clockWise;
      boolean counterClockWise;
 
     public SpinServo(HardwareMap map) {
         //What is name of the servo in robot for spin duck
-        servo = map.servo.get("");
+        servo = map.get(Servo.class,"");
+        continuousServo = map.get(CRServo.class, "");
     }
 
     @Override
     public void update() {
-     if (clockWise){
+    /* if (clockWise){
             //Move servo from 0  to 1
             if(isSpeedIncreasing) {
                 position = position+incrementSpeed;
                 if(position >= maxPosition){
                     position = maxPosition;
                     isSpeedIncreasing= false;
-
+                    servo.setPosition(position);
                 }
             }
 
@@ -42,11 +45,22 @@ public class SpinServo extends Subsystem {
             if(position<= minPosition){
                 position = minPosition;
                 isSpeedIncreasing = false;
+                servo.setPosition(position);
             }
 
-        }
+        }*/
 
-        servo.setPosition(position);
+     //Continuous servo
+       if(clockWise) {
+           //full power forward
+           continuousServo.setPower(1);
+       } else if (counterClockWise) {
+           //full power backward
+           continuousServo.setPower(-1);
+       } else {
+           //stop servo
+           continuousServo.setPower(0);
+       }
     }
 
 
