@@ -3,25 +3,25 @@ package com.edinaftc.library.subsystems;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class SpinServo extends Subsystem {
 
 
 
-     final double incrementSpeed = 0.01;
+   /*  final double incrementSpeed = 0.01;
      final double maxPosition = 1.0;
      final double minPosition = 0.0;
     double position = (maxPosition-minPosition)/2;
     boolean isSpeedIncreasing = true;
-     //Servo servo;
+
+    */
      CRServo continuousServo;
      boolean clockWise;
      boolean counterClockWise;
+     boolean noDirection;
 
     public SpinServo(HardwareMap map) {
         //What is name of the servo in robot for spin duck
-       // servo = map.get(Servo.class,"");
         continuousServo = map.get(CRServo.class, "");
     }
 
@@ -57,7 +57,7 @@ public class SpinServo extends Subsystem {
        } else if (counterClockWise) {
            //full power backward
            continuousServo.setPower(-1);
-       } else {
+       } else if (noDirection){
            //stop servo
            continuousServo.setPower(0);
        }
@@ -67,12 +67,23 @@ public class SpinServo extends Subsystem {
     public void spin(boolean leftBumper, boolean rightBumper)  {
 
         if(leftBumper)  {
-            counterClockWise = true;
-            clockWise = false;
+            if(counterClockWise){
+                noDirection = true;
+            } else  {
+                counterClockWise = true;
+                clockWise = false;
+            }
+
+
         }
             else if(rightBumper) {
-            clockWise = true;
-            counterClockWise = false;
+                if(clockWise) {
+                    noDirection = true;
+                } else {
+                    clockWise = true;
+                    counterClockWise = false;
+                }
+
         }
 
 
