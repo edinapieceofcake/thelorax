@@ -1,6 +1,7 @@
 package com.edinaftc.skystone;
 
 import com.edinaftc.library.subsystems.Intake;
+import com.edinaftc.library.subsystems.Lift;
 import com.edinaftc.library.subsystems.MecanumDrive;
 import com.edinaftc.library.subsystems.SpinServo;
 import com.edinaftc.library.subsystems.Subsystem;
@@ -22,6 +23,8 @@ public class Robot {
     public Intake intake;
 
     public SpinServo servo;
+
+    public Lift lift;
 
     private List<Subsystem> subsystems;
 
@@ -72,7 +75,12 @@ public class Robot {
 
         }
 
+        try {
+            lift = new Lift(opMode.hardwareMap);
+            subsystems.add(lift);
+        } catch (IllegalArgumentException e) {
 
+        }
 
         subsystemUpdateExecutor = ThreadPool.newSingleThreadExecutor("subsystem update");
     }

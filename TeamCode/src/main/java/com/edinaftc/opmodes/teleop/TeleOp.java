@@ -33,6 +33,8 @@ public class TeleOp extends OpMode {
 
         robot.servo.spin(_gamepad2.left_bumper, _gamepad2.right_bumper);
 
+        robot.lift.setLiftPower(gamepad2.left_stick_y);
+
         robot.drive.displayTelemetry(telemetry);
 
         telemetry.update();
