@@ -14,14 +14,14 @@ public class SpinServo extends Subsystem {
      final double minPosition = 0.0;
     double position = (maxPosition-minPosition)/2;
     boolean isSpeedIncreasing = true;
-     Servo servo;
+     //Servo servo;
      CRServo continuousServo;
      boolean clockWise;
      boolean counterClockWise;
 
     public SpinServo(HardwareMap map) {
         //What is name of the servo in robot for spin duck
-        servo = map.get(Servo.class,"");
+       // servo = map.get(Servo.class,"");
         continuousServo = map.get(CRServo.class, "");
     }
 
