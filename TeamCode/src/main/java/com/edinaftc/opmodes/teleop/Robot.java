@@ -1,4 +1,4 @@
-package com.edinaftc.skystone;
+package com.edinaftc.opmodes.teleop;
 
 import com.edinaftc.library.subsystems.Intake;
 import com.edinaftc.library.subsystems.Lift;

@@ -1,4 +1,4 @@
-package com.edinaftc.library;
+package com.edinaftc.library.util;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 

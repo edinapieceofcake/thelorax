@@ -1,4 +1,4 @@
-package com.edinaftc.skystone.vision;
+package com.edinaftc.library.vision.skystone;
 
 public enum SkystoneLocation {
     left,

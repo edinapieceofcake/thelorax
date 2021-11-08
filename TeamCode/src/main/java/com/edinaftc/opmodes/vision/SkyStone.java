@@ -28,8 +28,8 @@
  */
 package com.edinaftc.opmodes.vision;
 
-import com.edinaftc.library.Stickygamepad;
-import com.edinaftc.skystone.vision.SkyStoneDetector;
+import com.edinaftc.library.util.Stickygamepad;
+import com.edinaftc.library.vision.skystone.SkyStoneDetector;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -148,10 +148,10 @@ public class SkyStone extends OpMode {
             }
         }
 
-        telemetry.addData("left (x, y)", "%f %f", skyStoneDetector.cx0, skyStoneDetector.cy0);
-        telemetry.addData("middle (x, y)", "%f %f", skyStoneDetector.cx1, skyStoneDetector.cy1);
-        telemetry.addData("right (x, y)", "%f %f", skyStoneDetector.cx2, skyStoneDetector.cy2);
-        telemetry.addData("dot location", location);
+        telemetry.addData("left (x, y) value", "%f %f %f", skyStoneDetector.cx0, skyStoneDetector.cy0, skyStoneDetector.left);
+        telemetry.addData("middle (x, y) value", "%f %f %f", skyStoneDetector.cx1, skyStoneDetector.cy1, skyStoneDetector.middle);
+        telemetry.addData("right (x, y) value", "%f %f %f", skyStoneDetector.cx2, skyStoneDetector.cy2, skyStoneDetector.right);
+        telemetry.addData("adjustment location", location);
         telemetry.addData("location ", skyStoneDetector.getLocation());
         telemetry.update();
     }

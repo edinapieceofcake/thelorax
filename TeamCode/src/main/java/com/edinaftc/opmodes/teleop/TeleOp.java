@@ -1,8 +1,6 @@
 package com.edinaftc.opmodes.teleop;
 
-import com.edinaftc.library.Stickygamepad;
-import com.edinaftc.library.Vector2d;
-import com.edinaftc.skystone.Robot;
+import com.edinaftc.library.util.Stickygamepad;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Teleop", group = "teleop")
@@ -33,9 +31,10 @@ public class TeleOp extends OpMode {
 
         robot.servo.spin(_gamepad2.left_bumper, _gamepad2.right_bumper);
 
-        robot.lift.setLiftPower(gamepad2.left_stick_y);
+        robot.lift.setLiftPower(gamepad2.left_stick_y, gamepad2.right_trigger);
 
         robot.drive.displayTelemetry(telemetry);
+        robot.lift.displayTelemetry(telemetry);
 
         telemetry.update();
     }

@@ -1,4 +1,4 @@
-package com.edinaftc.skystone.vision;
+package com.edinaftc.library.vision.freightfrenzy;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -7,7 +7,7 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class SkyStoneDetector extends OpenCvPipeline {
+public class FreightFrenzyDetector extends OpenCvPipeline {
     private Mat mat0;
     private Mat mat1;
     private Mat mat2;
@@ -22,16 +22,24 @@ public class SkyStoneDetector extends OpenCvPipeline {
     private Scalar WHITE = new Scalar(255,255,255);
     private Scalar RED = new Scalar(255, 0, 0);
 
-    public double cx0 = 210;
+    public double cx0 = 50;
     public double cy0 = 460;
     public double cx1 = 440;
     public double cy1 = 460;
-    public double cx2 = 760;
+    public double cx2 = 890;
     public double cy2 = 460;
+
+    // lowest 950
+    // middle 1450
+    // high 2060
+
+    public double left = 0;
+    public double middle = 0;
+    public double right = 0;
 
     private int r = 30;
 
-    private SkystoneLocation location = SkystoneLocation.right;
+    private FreightFrenzyLocation location = FreightFrenzyLocation.right;
 
     @Override
     public Mat processFrame(Mat frame) {
@@ -68,26 +76,26 @@ public class SkyStoneDetector extends OpenCvPipeline {
         Core.bitwise_and(mask1, frame, mat1);
         Core.bitwise_and(mask2, frame, mat2);
 
-        double val0 = Core.sumElems(mat0).val[0] + Core.sumElems(mat0).val[1] +
+        left = Core.sumElems(mat0).val[0] + Core.sumElems(mat0).val[1] +
                 Core.sumElems(mat0).val[2];
-        double val1 = Core.sumElems(mat1).val[0] + Core.sumElems(mat1).val[1] +
+        middle = Core.sumElems(mat1).val[0] + Core.sumElems(mat1).val[1] +
                 Core.sumElems(mat1).val[2];
-        double val2 = Core.sumElems(mat2).val[0] + Core.sumElems(mat2).val[1] +
+        right = Core.sumElems(mat2).val[0] + Core.sumElems(mat2).val[1] +
                 Core.sumElems(mat2).val[2];
 
-        if (val0 < val1 && val0 < val2) {
-            location = SkystoneLocation.left;
-        } else if (val1 < val0 && val1 < val2) {
-            location = SkystoneLocation.middle;
+        if (left < middle && left < right) {
+            location = FreightFrenzyLocation.left;
+        } else if (middle < left && middle < right) {
+            location = FreightFrenzyLocation.middle;
         } else {
-            location = SkystoneLocation.right;
+            location = FreightFrenzyLocation.right;
         }
 
-        if (location == SkystoneLocation.right) {
+        if (location == FreightFrenzyLocation.right) {
             Imgproc.circle(frame, new Point(cx0, cy0), r/2, WHITE, Imgproc.FILLED);
             Imgproc.circle(frame, new Point(cx1, cy1), r/2, WHITE, Imgproc.FILLED);
             Imgproc.circle(frame, new Point(cx2, cy2), r, RED, Imgproc.FILLED);
-        } else if (location == SkystoneLocation.left) {
+        } else if (location == FreightFrenzyLocation.left) {
             Imgproc.circle(frame, new Point(cx0, cy0), r, RED, Imgproc.FILLED);
             Imgproc.circle(frame, new Point(cx1, cy1), r/2, WHITE, Imgproc.FILLED);
             Imgproc.circle(frame, new Point(cx2, cy2), r/2, WHITE, Imgproc.FILLED);
@@ -100,7 +108,17 @@ public class SkyStoneDetector extends OpenCvPipeline {
         return frame;
     }
 
-    public SkystoneLocation getLocation() {
+    public FreightFrenzyLocation getLocation() {
         return location;
+    }
+
+    public int getLiftHeight(){
+        if (location == FreightFrenzyLocation.left) {
+            return 950;
+        } else if (location == FreightFrenzyLocation.middle){
+            return 1450;
+        } else {
+            return 2060;
+        }
     }
 }

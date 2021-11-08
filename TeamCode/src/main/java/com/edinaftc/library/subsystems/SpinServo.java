@@ -22,7 +22,7 @@ public class SpinServo extends Subsystem {
 
     public SpinServo(HardwareMap map) {
         //What is name of the servo in robot for spin duck
-        continuousServo = map.get(CRServo.class, "");
+        continuousServo = map.get(CRServo.class, "spinner");
 
         //set to stop
         continuousServo.setPower(0.5);
