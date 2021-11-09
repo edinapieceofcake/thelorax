@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * This is an example of a more complex path to really test the tuning.
  */
 @Autonomous(group = "drive")
-public class BlueDockSpinPark extends LinearOpMode {
+public class RedDockWarehouse extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -25,8 +25,6 @@ public class BlueDockSpinPark extends LinearOpMode {
 
         int liftLocation = frightFrenzy.freightFrenzyDetector.getLiftHeight();
 
-        waitForStart();
-
         if (isStopRequested()) return;
 
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
@@ -36,18 +34,12 @@ public class BlueDockSpinPark extends LinearOpMode {
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .strafeTo(new Vector2d(-7, 24))
-                .build();
-
-        Trajectory traj3 = drive.trajectoryBuilder(traj1.end())
-                .back(20)
+                .splineTo(new Vector2d(6, 0), Math.toRadians(90))
+                .forward(30)
                 .build();
 
         drive.followTrajectory(traj1);
         sleep(2000);
         drive.followTrajectory(traj2);
-        sleep(2000);
-        drive.followTrajectory(traj3);
-
     }
 }

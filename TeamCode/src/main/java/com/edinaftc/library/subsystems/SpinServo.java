@@ -25,7 +25,7 @@ public class SpinServo extends Subsystem {
         continuousServo = map.get(CRServo.class, "spinner");
 
         //set to stop
-        continuousServo.setPower(0.5);
+        continuousServo.setPower(0.0);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SpinServo extends Subsystem {
            continuousServo.setPower(-1);
        } else if (noDirection){
            //stop servo
-           continuousServo.setPower(0.5);
+           continuousServo.setPower(0.0);
        }
     }
 

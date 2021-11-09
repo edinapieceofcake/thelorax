@@ -34,7 +34,7 @@ public class BlueDockWarehouse extends LinearOpMode {
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .splineTo(new Vector2d(0, 0), Math.toRadians(270))
+                .splineTo(new Vector2d(5, 0), Math.toRadians(270))
                 .forward(30)
                 .build();
 
