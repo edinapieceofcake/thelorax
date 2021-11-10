@@ -46,11 +46,11 @@ public class RedDockSpinPark extends LinearOpMode {
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .strafeTo(new Vector2d(-7, -24))
+                .strafeTo(new Vector2d(-4, -26))
                 .build();
 
         Trajectory traj3 = drive.trajectoryBuilder(traj2.end())
-                .back(20)
+                .back(22)
                 .build();
 
         drive.followTrajectory(traj1);
@@ -69,8 +69,8 @@ public class RedDockSpinPark extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(1);
         drive.followTrajectory(traj2);
-        spinner.setPower(1);
-        sleep(3000);
+        spinner.setPower(-1);
+        sleep(4000);
         spinner.setPower(0);
         drive.followTrajectory(traj3);
     }

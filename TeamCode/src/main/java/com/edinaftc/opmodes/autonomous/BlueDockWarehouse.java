@@ -7,6 +7,9 @@ import com.edinaftc.library.roadrunner.drive.SampleMecanumDrive;
 import com.edinaftc.library.vision.freightfrenzy.FrightFrenzy;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /*
  * This is an example of a more complex path to really test the tuning.
@@ -17,6 +20,11 @@ public class BlueDockWarehouse extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap);
+        Servo bucket = hardwareMap.servo.get("bucket");
+        DcMotorEx lift = hardwareMap.get(DcMotorEx.class, "lift");
+
+        bucket.setPosition(0.3);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (!isStarted()){
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
@@ -39,7 +47,20 @@ public class BlueDockWarehouse extends LinearOpMode {
                 .build();
 
         drive.followTrajectory(traj1);
+        lift.setTargetPosition(liftLocation);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setPower(1);
+        while (lift.isBusy()){
+            ;
+        }
+
         sleep(2000);
+        bucket.setPosition(1);
+        sleep(2000);
+        bucket.setPosition(0);
+        lift.setTargetPosition(0);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setPower(1);
         drive.followTrajectory(traj2);
     }
 }
