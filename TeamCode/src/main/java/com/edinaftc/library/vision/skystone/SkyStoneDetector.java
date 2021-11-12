@@ -83,9 +83,9 @@ public class SkyStoneDetector extends OpenCvPipeline {
         right = Core.sumElems(mat2).val[0] + Core.sumElems(mat2).val[1] +
                 Core.sumElems(mat2).val[2];
 
-        if (left < middle && left < right) {
+        if (left > middle && left > right) {
             location = SkystoneLocation.left;
-        } else if (middle < left && middle < right) {
+        } else if (middle > left && middle > right) {
             location = SkystoneLocation.middle;
         } else {
             location = SkystoneLocation.right;

@@ -1,6 +1,6 @@
 package com.edinaftc.library.roadrunner.util;
 
-import com.acmerobotics.dashboard.canvas.Canvas;
+//import com.acmerobotics.dashboard.canvas.Canvas;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.path.Path;
@@ -14,7 +14,7 @@ public class DashboardUtil {
     private static final double DEFAULT_RESOLUTION = 2.0; // distance units; presumed inches
     private static final double ROBOT_RADIUS = 9; // in
 
-
+/*
     public static void drawPoseHistory(Canvas canvas, List<Pose2d> poseHistory) {
         double[] xPoints = new double[poseHistory.size()];
         double[] yPoints = new double[poseHistory.size()];
@@ -51,4 +51,6 @@ public class DashboardUtil {
         double x2 = pose.getX() + v.getX(), y2 = pose.getY() + v.getY();
         canvas.strokeLine(x1, y1, x2, y2);
     }
+
+ */
 }

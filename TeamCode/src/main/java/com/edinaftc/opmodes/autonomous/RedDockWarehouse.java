@@ -25,10 +25,13 @@ public class RedDockWarehouse extends LinearOpMode {
         DcMotorEx lift = hardwareMap.get(DcMotorEx.class, "lift");
 
         bucket.setPosition(0.3);
+        frightFrenzy.freightFrenzyDetector.cx2 = 840;
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (!isStarted()){
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
+            telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left,
+                    frightFrenzy.freightFrenzyDetector.middle, frightFrenzy.freightFrenzyDetector.right);
             telemetry.update();
         }
 
@@ -53,7 +56,8 @@ public class RedDockWarehouse extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(1);
         while (lift.isBusy()){
-            ;
+            telemetry.addData("t, a", "%d %d", lift.getTargetPosition(), lift.getCurrentPosition());
+            telemetry.update();
         }
 
         sleep(2000);

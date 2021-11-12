@@ -29,6 +29,8 @@ public class BlueDockSpinPark extends LinearOpMode {
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         while (!isStarted()){
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
+            telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left,
+                    frightFrenzy.freightFrenzyDetector.middle, frightFrenzy.freightFrenzyDetector.right);
             telemetry.update();
         }
 
@@ -57,7 +59,8 @@ public class BlueDockSpinPark extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(1);
         while (lift.isBusy()){
-            ;
+            telemetry.addData("t, a", "%d %d", lift.getTargetPosition(), lift.getCurrentPosition());
+            telemetry.update();
         }
 
         sleep(2000);
@@ -71,5 +74,6 @@ public class BlueDockSpinPark extends LinearOpMode {
         spinner.setPower(1);
         sleep(4000);
         spinner.setPower(0);
-        drive.followTrajectory(traj3);    }
+        drive.followTrajectory(traj3);
+    }
 }

@@ -30,6 +30,7 @@ package com.edinaftc.opmodes.vision;
 
 import com.edinaftc.library.util.Stickygamepad;
 import com.edinaftc.library.vision.skystone.SkyStoneDetector;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -39,7 +40,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-//@Disabled
+@Disabled
 @TeleOp
 public class SkyStone extends OpMode {
     OpenCvWebcam webcam;

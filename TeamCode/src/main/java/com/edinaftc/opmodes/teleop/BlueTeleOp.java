@@ -3,8 +3,8 @@ package com.edinaftc.opmodes.teleop;
 import com.edinaftc.library.util.Stickygamepad;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Teleop", group = "teleop")
-public class TeleOp extends OpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "BlueTeleop", group = "teleop")
+public class BlueTeleOp extends OpMode {
     private Robot robot;
     private Stickygamepad _gamepad1;
     private Stickygamepad _gamepad2;
@@ -29,7 +29,7 @@ public class TeleOp extends OpMode {
 
         robot.intake.solveDirection(_gamepad1.left_bumper, _gamepad1.right_bumper);
 
-        robot.servo.spin(_gamepad2.left_bumper, _gamepad2.right_bumper);
+        robot.servo.spin(-gamepad2.left_trigger);
 
         robot.lift.setLiftPower(gamepad2.left_stick_y, gamepad2.right_trigger);
 

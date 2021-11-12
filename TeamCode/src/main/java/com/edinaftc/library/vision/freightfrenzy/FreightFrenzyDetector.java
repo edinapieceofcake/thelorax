@@ -83,9 +83,9 @@ public class FreightFrenzyDetector extends OpenCvPipeline {
         right = Core.sumElems(mat2).val[0] + Core.sumElems(mat2).val[1] +
                 Core.sumElems(mat2).val[2];
 
-        if (left < middle && left < right) {
+        if (left > middle && left > right) {
             location = FreightFrenzyLocation.left;
-        } else if (middle < left && middle < right) {
+        } else if (middle > left && middle > right) {
             location = FreightFrenzyLocation.middle;
         } else {
             location = FreightFrenzyLocation.right;
