@@ -44,7 +44,7 @@ public class RedDockSpinPark extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose, true)
-                .strafeTo(new Vector2d(-20, 26)) // -5, 10 went to the up and right
+                .strafeTo(new Vector2d(-20, 27)) // -5, 10 went to the up and right
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
@@ -60,8 +60,7 @@ public class RedDockSpinPark extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(1);
         while (lift.isBusy()){
-            telemetry.addData("t, a", "%d %d", lift.getTargetPosition(), lift.getCurrentPosition());
-            telemetry.update();
+            ;
         }
 
         sleep(2000);

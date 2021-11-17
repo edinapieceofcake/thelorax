@@ -21,9 +21,9 @@ public class Intake extends Subsystem {
     @Override
     public void update(){
         if (_direction == Direction.Counterclockwise){
-            _motor4321.setPower(.4);
+            _motor4321.setPower(.5);
         } else if (_direction == Direction.Clockwise){
-            _motor4321.setPower(-.4);
+            _motor4321.setPower(-.5);
         } else {
             _motor4321.setPower(0);
         }

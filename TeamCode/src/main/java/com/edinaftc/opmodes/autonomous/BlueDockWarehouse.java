@@ -54,8 +54,7 @@ public class BlueDockWarehouse extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setPower(1);
         while (lift.isBusy()){
-            telemetry.addData("t, a", "%d %d", lift.getTargetPosition(), lift.getCurrentPosition());
-            telemetry.update();
+            ;
         }
 
         sleep(2000);

@@ -33,6 +33,5 @@ public class SpinServo extends Subsystem {
 
     public void spin(double leftTrigger)  {
         _leftTrigger = leftTrigger;
-
     }
 }
