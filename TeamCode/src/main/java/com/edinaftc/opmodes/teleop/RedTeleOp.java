@@ -35,6 +35,7 @@ public class RedTeleOp extends OpMode {
 
         robot.drive.displayTelemetry(telemetry);
         robot.lift.displayTelemetry(telemetry);
+        robot.servo.displayTelemetry(telemetry);
 
         telemetry.update();
     }

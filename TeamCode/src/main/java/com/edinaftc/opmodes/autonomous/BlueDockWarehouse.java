@@ -29,8 +29,14 @@ public class BlueDockWarehouse extends LinearOpMode {
 
         while (!isStarted()){
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
-            telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left,
-                    frightFrenzy.freightFrenzyDetector.middle, frightFrenzy.freightFrenzyDetector.right);
+            telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left / 1000,
+                    frightFrenzy.freightFrenzyDetector.middle / 1000, frightFrenzy.freightFrenzyDetector.right / 1000);
+            telemetry.addData("l r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.leftR / 1000,
+                    frightFrenzy.freightFrenzyDetector.leftG / 1000, frightFrenzy.freightFrenzyDetector.leftB / 1000);
+            telemetry.addData("m r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.middleR / 1000,
+                    frightFrenzy.freightFrenzyDetector.middleG / 1000, frightFrenzy.freightFrenzyDetector.middleB / 1000);
+            telemetry.addData("r r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.rightR / 1000,
+                    frightFrenzy.freightFrenzyDetector.rightG / 1000, frightFrenzy.freightFrenzyDetector.rightB / 1000);
             telemetry.update();
         }
 
@@ -41,7 +47,7 @@ public class BlueDockWarehouse extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose, true)
-                .strafeTo(new Vector2d(-20, 26)) // -5, 10 went to the up and right
+                .strafeTo(new Vector2d(-22, 28)) // -5, 10 went to the up and right
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())

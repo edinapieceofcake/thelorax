@@ -33,8 +33,17 @@ public class FreightFrenzyDetector extends OpenCvPipeline {
     // middle 1450
     // high 2060
 
+    public double leftR= 0;
+    public double leftG = 0;
+    public double leftB = 0;
     public double left = 0;
+    public double middleR = 0;
+    public double middleG = 0;
+    public double middleB = 0;
     public double middle = 0;
+    public double rightR = 0;
+    public double rightG = 0;
+    public double rightB = 0;
     public double right = 0;
 
     private int r = 30;
@@ -76,16 +85,25 @@ public class FreightFrenzyDetector extends OpenCvPipeline {
         Core.bitwise_and(mask1, frame, mat1);
         Core.bitwise_and(mask2, frame, mat2);
 
+        leftR = Core.sumElems(mat0).val[0];
+        leftG = Core.sumElems(mat0).val[1];
+        leftB = Core.sumElems(mat0).val[2];
         left = Core.sumElems(mat0).val[0] + Core.sumElems(mat0).val[1] +
                 Core.sumElems(mat0).val[2];
+        middleR = Core.sumElems(mat1).val[0];
+        middleG = Core.sumElems(mat1).val[1];
+        middleB = Core.sumElems(mat1).val[2];
         middle = Core.sumElems(mat1).val[0] + Core.sumElems(mat1).val[1] +
                 Core.sumElems(mat1).val[2];
+        rightR = Core.sumElems(mat2).val[0];
+        rightG = Core.sumElems(mat2).val[1];
+        rightB = Core.sumElems(mat2).val[2];
         right = Core.sumElems(mat2).val[0] + Core.sumElems(mat2).val[1] +
                 Core.sumElems(mat2).val[2];
 
-        if (left > middle && left > right) {
+        if (leftR < middleR && leftR < rightR) {
             location = FreightFrenzyLocation.left;
-        } else if (middle > left && middle > right) {
+        } else if (middleR < leftR && middleR < rightR) {
             location = FreightFrenzyLocation.middle;
         } else {
             location = FreightFrenzyLocation.right;

@@ -4,6 +4,8 @@ package com.edinaftc.library.subsystems;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class SpinServo extends Subsystem {
 
     CRServo continuousServo;
@@ -33,5 +35,9 @@ public class SpinServo extends Subsystem {
 
     public void spin(double leftTrigger)  {
         _leftTrigger = leftTrigger;
+    }
+
+    public void displayTelemetry(Telemetry telemetry) {
+        telemetry.addData("trigger, power",  "%f %f", _leftTrigger, continuousServo.getPower());
     }
 }
