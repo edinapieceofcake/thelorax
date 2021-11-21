@@ -48,7 +48,7 @@ public class RedDockWarehouse extends LinearOpMode {
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose, true)
-                .strafeTo(new Vector2d(-20, -26)) // -5, 10 went to the up and right
+                .strafeTo(new Vector2d(-21, -26)) // -5, 10 went to the up and right
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
