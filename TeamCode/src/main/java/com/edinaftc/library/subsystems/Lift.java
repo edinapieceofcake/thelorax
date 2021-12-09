@@ -26,7 +26,7 @@ public class Lift extends Subsystem {
     public void update(){
         if (_trigger <= 0.8)
             if ((_lift.getCurrentPosition() > 150) && _movingUp)
-                _bucket.setPosition(.3);
+                _bucket.setPosition(.45);
             else
                 _bucket.setPosition(-1);
         else
@@ -49,5 +49,7 @@ public class Lift extends Subsystem {
         telemetry.addData("lift", "%d", _lift.getCurrentPosition());
         telemetry.addData("trigger", "%f", _trigger);
         telemetry.addData("power", "%f", _power);
+        telemetry.addData("up", "%s", _movingUp);
+        telemetry.addData("bucket", "%f", _bucket.getPosition());
     }
 }
