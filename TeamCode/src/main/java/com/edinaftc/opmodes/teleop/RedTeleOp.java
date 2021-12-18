@@ -31,10 +31,10 @@ public class RedTeleOp extends OpMode {
 
         robot.servo.spin(gamepad2.left_trigger);
 
-        robot.lift.setLiftPower(gamepad2.left_stick_y, gamepad2.right_trigger);
+        robot.arm.moveArm(gamepad2.left_stick_x, gamepad2.left_stick_y);
 
         robot.drive.displayTelemetry(telemetry);
-        robot.lift.displayTelemetry(telemetry);
+        robot.arm.displayTelemetry(telemetry);
         robot.servo.displayTelemetry(telemetry);
 
         telemetry.update();
