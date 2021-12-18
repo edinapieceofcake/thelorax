@@ -1,7 +1,7 @@
 package com.edinaftc.opmodes.teleop;
 
 import com.edinaftc.library.subsystems.Intake;
-import com.edinaftc.library.subsystems.Lift;
+import com.edinaftc.library.subsystems.Turret;
 import com.edinaftc.library.subsystems.MecanumDrive;
 import com.edinaftc.library.subsystems.SpinServo;
 import com.edinaftc.library.subsystems.Subsystem;
@@ -24,7 +24,7 @@ public class Robot {
 
     public SpinServo servo;
 
-    public Lift lift;
+    public Turret arm;
 
     private List<Subsystem> subsystems;
 
@@ -76,8 +76,8 @@ public class Robot {
         }
 
         try {
-            lift = new Lift(opMode.hardwareMap);
-            subsystems.add(lift);
+            arm = new Turret(opMode.hardwareMap);
+            subsystems.add(arm);
         } catch (IllegalArgumentException e) {
 
         }
