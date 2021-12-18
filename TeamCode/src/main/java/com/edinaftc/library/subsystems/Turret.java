@@ -7,14 +7,55 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class Lift extends Subsystem {
+
+public class Turret extends Subsystem{
+    private DcMotorEx vMotor;
+    private DcMotorEx hMotor;
+    double xPos;
+    double yPos;
+
+    public Turret(HardwareMap map){
+        vMotor = map.get(DcMotorEx.class, "vm");
+        hMotor = map.get(DcMotorEx.class, "hm");
+
+        vMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        vMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        hMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+    }
+
+
+    public void moveArm(double x, double y) {
+        this.xPos = x;
+        this.yPos = y;
+    }
+
+    public void update(){
+        hMotor.setPower(xPos);
+        vMotor.setPower(yPos);
+    }
+
+
+    public void displayTelemetry(Telemetry telemetry) {
+        telemetry.addData("vm", "%d", vMotor.getCurrentPosition());
+        telemetry.addData("hm", "%d", hMotor.getCurrentPosition());
+
+    }
+
+}
+
+/*{
     private DcMotorEx _lift;
     private Servo _bucket;
     private double _power;
     private double _trigger;
     private boolean _movingUp;
 
-    public Lift(HardwareMap map){
+    public Turret(HardwareMap map){
         _lift = map.get(DcMotorEx.class,"lift");
         _lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -52,4 +93,4 @@ public class Lift extends Subsystem {
         telemetry.addData("up", "%s", _movingUp);
         telemetry.addData("bucket", "%f", _bucket.getPosition());
     }
-}
+}*/
