@@ -27,15 +27,16 @@ public class BlueTeleOp extends OpMode {
 
         robot.drive.setVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_button);
 
-        robot.intake.solveDirection(_gamepad1.left_bumper, _gamepad1.right_bumper);
-
+        robot.intake.runIntake(gamepad2.left_bumper, gamepad2.right_bumper);
+/*
         robot.servo.spin(-gamepad2.left_trigger);
-
-        robot.arm.moveArm(gamepad2.left_stick_x, gamepad2.left_stick_y);
+*/
+        robot.turret.moveArm(gamepad2.left_stick_x, -gamepad2.right_stick_y);
 
         robot.drive.displayTelemetry(telemetry);
-        robot.arm.displayTelemetry(telemetry);
-        robot.servo.displayTelemetry(telemetry);
+        robot.turret.displayTelemetry(telemetry);
+        robot.intake.displayTelemetry(telemetry);
+//        robot.servo.displayTelemetry(telemetry);
 
         telemetry.update();
     }

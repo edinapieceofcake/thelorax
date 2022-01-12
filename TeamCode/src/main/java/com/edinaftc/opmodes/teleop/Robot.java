@@ -24,7 +24,7 @@ public class Robot {
 
     public SpinServo servo;
 
-    public Turret arm;
+    public Turret turret;
 
     private List<Subsystem> subsystems;
 
@@ -67,17 +67,17 @@ public class Robot {
         } catch (IllegalArgumentException e) {
 
         }
-
+/*
         try {
             servo = new SpinServo(opMode.hardwareMap);
             subsystems.add(servo);
         } catch (IllegalArgumentException e) {
 
         }
-
+*/
         try {
-            arm = new Turret(opMode.hardwareMap);
-            subsystems.add(arm);
+            turret = new Turret(opMode.hardwareMap);
+            subsystems.add(turret);
         } catch (IllegalArgumentException e) {
 
         }

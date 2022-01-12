@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Intake extends Subsystem {
     enum Direction{
         Clockwise, Counterclockwise, Neither
@@ -14,8 +16,6 @@ public class Intake extends Subsystem {
 
     public Intake(HardwareMap map){
         _motor4321 = map.get(DcMotorEx.class,"intake");
-        _motor4321.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        _motor4321.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     @Override
@@ -23,25 +23,23 @@ public class Intake extends Subsystem {
         if (_direction == Direction.Counterclockwise){
             _motor4321.setPower(.5);
         } else if (_direction == Direction.Clockwise){
-            _motor4321.setPower(-.5);
+            _motor4321.setPower(-1);
         } else {
             _motor4321.setPower(0);
         }
     }
 
-    public void solveDirection(boolean leftBumper, boolean rightBumper){
+    public void runIntake(boolean leftBumper, boolean rightBumper){
         if (leftBumper){
-            if (_direction == Direction.Counterclockwise){
-                _direction = Direction.Neither;
-            } else {
-                _direction = Direction.Counterclockwise;
-            }
+            _direction = Direction.Counterclockwise;
         } else if (rightBumper){
-            if (_direction == Direction.Clockwise){
-                _direction = Direction.Neither;
-            } else {
-                _direction = Direction.Clockwise;
-            }
+            _direction = Direction.Clockwise;
+        } else {
+            _direction = Direction.Neither;
         }
+    }
+
+    public void displayTelemetry(Telemetry telemetry) {
+        telemetry.addData("intake power ", "%f", _motor4321.getPower());
     }
 }

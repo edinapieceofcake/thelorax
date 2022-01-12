@@ -42,8 +42,6 @@ public class BlueDockSpinPark extends LinearOpMode {
 
         int liftLocation = frightFrenzy.freightFrenzyDetector.getLiftHeight();
 
-        waitForStart();
-
         if (isStopRequested()) return;
 
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
