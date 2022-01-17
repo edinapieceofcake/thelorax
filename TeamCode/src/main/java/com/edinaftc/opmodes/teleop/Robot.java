@@ -67,14 +67,14 @@ public class Robot {
         } catch (IllegalArgumentException e) {
 
         }
-/*
+
         try {
             servo = new SpinServo(opMode.hardwareMap);
             subsystems.add(servo);
         } catch (IllegalArgumentException e) {
 
         }
-*/
+
         try {
             turret = new Turret(opMode.hardwareMap);
             subsystems.add(turret);

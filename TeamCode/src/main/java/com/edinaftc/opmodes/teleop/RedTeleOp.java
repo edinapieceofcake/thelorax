@@ -27,15 +27,15 @@ public class RedTeleOp extends OpMode {
 
         robot.drive.setVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_button);
 
-        robot.intake.runIntake(gamepad2.left_bumper, gamepad2.right_bumper);
-/*
+        robot.intake.runIntake(gamepad1.left_bumper, gamepad1.right_bumper);
+
         robot.servo.spin(gamepad2.left_trigger);
-*/
-        robot.turret.moveArm(gamepad2.left_stick_x, -gamepad2.left_stick_y);
+
+        robot.turret.moveArm(gamepad2.left_stick_x, -gamepad2.left_stick_y, _gamepad2.y, _gamepad2.x, _gamepad2.b, true);
 
         robot.drive.displayTelemetry(telemetry);
         robot.turret.displayTelemetry(telemetry);
-//        robot.servo.displayTelemetry(telemetry);
+        robot.servo.displayTelemetry(telemetry);
 
         telemetry.update();
     }
