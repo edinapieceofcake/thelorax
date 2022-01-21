@@ -17,7 +17,6 @@ public class Turret extends Subsystem{
     private boolean turretRecenterRunning;
     private boolean allianceHubButton;
     private boolean allianceHubRunning;
-    private boolean turretMoving;
     private boolean isRedTeleop;
     double xPower;
     double yPower;
@@ -39,7 +38,6 @@ public class Turret extends Subsystem{
         turretRecenterRunning = false;
         allianceHubButton = false;
         allianceHubRunning = false;
-        turretMoving = false;
         isRedTeleop = false;
     }
 
@@ -53,13 +51,12 @@ public class Turret extends Subsystem{
     }
 
     public void update(){
-        if (allianceHubButton && !turretMoving) {
+        if (allianceHubButton) {
             allianceHubRunning = true;
-            vMotor.setTargetPosition(1800);
+            vMotor.setTargetPosition(2500);
             vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             vMotor.setPower(.75);
             allianceHubButton = false;
-            turretMoving = true;
         }
 
         if (allianceHubRunning) {
@@ -74,44 +71,46 @@ public class Turret extends Subsystem{
             }
 
             if (isRedTeleop) {
-                if (((vMotor.getCurrentPosition() < 1820) && (vMotor.getCurrentPosition() > 1780)) &&
+                if (((vMotor.getCurrentPosition() < 2520) && (vMotor.getCurrentPosition() > 2480)) &&
                         (hMotor.getCurrentPosition() < -1280)) {
                     allianceHubRunning = false;
+                    sharedHubRunning = false;
+                    turretRecenterRunning = false;
                     hMotor.setPower(0);
                     vMotor.setPower(0);
                     vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    turretMoving = false;
                 }
             } else {
-                if (((vMotor.getCurrentPosition() < 1820) && (vMotor.getCurrentPosition() > 1780)) &&
+                if (((vMotor.getCurrentPosition() < 2520) && (vMotor.getCurrentPosition() > 2480)) &&
                         (hMotor.getCurrentPosition() > 1280)) {
                     allianceHubRunning = false;
+                    sharedHubRunning = false;
+                    turretRecenterRunning = false;
                     hMotor.setPower(0);
                     vMotor.setPower(0);
                     vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    turretMoving = false;
                 }
             }
 
             if ((xPower != 0) || (yPower != 0)) {
                 allianceHubRunning = false;
+                sharedHubRunning = false;
+                turretRecenterRunning = false;
                 hMotor.setPower(xPower);
                 vMotor.setPower(yPower);
                 vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                turretMoving = false;
             }
         }
 
-        if (sharedHubButton && !turretMoving) {
+        if (sharedHubButton) {
             sharedHubRunning = true;
             vMotor.setTargetPosition(700);
             vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             vMotor.setPower(.75);
             sharedHubButton = false;
-            turretMoving = true;
         }
 
         if (sharedHubRunning) {
@@ -127,68 +126,72 @@ public class Turret extends Subsystem{
             if (isRedTeleop) {
                 if (((vMotor.getCurrentPosition() < 720) && (vMotor.getCurrentPosition() > 680)) &&
                         (hMotor.getCurrentPosition() > 1280)) {
+                    allianceHubRunning = false;
                     sharedHubRunning = false;
+                    turretRecenterRunning = false;
                     hMotor.setPower(0);
                     vMotor.setPower(0);
                     vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    turretMoving = false;
                 }
             } else {
                 if (((vMotor.getCurrentPosition() < 720) && (vMotor.getCurrentPosition() > 680)) &&
                         (hMotor.getCurrentPosition() < -1280)) {
+                    allianceHubRunning = false;
                     sharedHubRunning = false;
+                    turretRecenterRunning = false;
                     hMotor.setPower(0);
                     vMotor.setPower(0);
                     vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    turretMoving = false;
                 }
             }
 
             if ((xPower != 0) || (yPower != 0)) {
+                allianceHubRunning = false;
                 sharedHubRunning = false;
+                turretRecenterRunning = false;
                 hMotor.setPower(xPower);
                 vMotor.setPower(yPower);
                 vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                turretMoving = false;
             }
         }
 
-        if (turretRecenter && !turretMoving) {
+        if (turretRecenter) {
             turretRecenterRunning = true;
             hMotor.setTargetPosition(0);
             hMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hMotor.setPower(.75);
             turretRecenter = false;
-            turretMoving = true;
         }
 
         if (turretRecenterRunning) {
-            if ((hMotor.getCurrentPosition() <= 250) && (hMotor.getCurrentPosition() >= -250)) {
-                vMotor.setTargetPosition(160);
+            if ((hMotor.getCurrentPosition() <= 250) && (hMotor.getCurrentPosition() >= -250) && !vMotor.isBusy()) {
+                vMotor.setTargetPosition(100);
                 vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 vMotor.setPower(1);
             }
 
             if (((hMotor.getCurrentPosition() < 30) && (hMotor.getCurrentPosition() > -30)) &&
             (vMotor.getCurrentPosition() < 200)) {
+                allianceHubRunning = false;
+                sharedHubRunning = false;
                 turretRecenterRunning = false;
                 hMotor.setPower(0);
                 vMotor.setPower(0);
                 vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                turretMoving = false;
             }
 
             if ((xPower != 0) || (yPower != 0)) {
+                allianceHubRunning = false;
+                sharedHubRunning = false;
                 turretRecenterRunning = false;
                 hMotor.setPower(xPower);
                 vMotor.setPower(yPower);
                 vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                turretMoving = false;
             }
         }
 

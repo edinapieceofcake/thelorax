@@ -27,7 +27,7 @@ public class RedTeleOp extends OpMode {
 
         robot.drive.setVelocity(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.left_stick_button);
 
-        robot.intake.runIntake(gamepad1.left_bumper, gamepad1.right_bumper);
+        robot.intake.runIntake(gamepad1.right_bumper, gamepad1.left_bumper || gamepad2.left_bumper);
 
         robot.servo.spin(gamepad2.left_trigger);
 
