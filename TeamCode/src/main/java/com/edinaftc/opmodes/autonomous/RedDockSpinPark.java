@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.edinaftc.library.roadrunner.drive.SampleMecanumDrive;
+import com.edinaftc.library.util.Stickygamepad;
 import com.edinaftc.library.vision.freightfrenzy.FrightFrenzy;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -24,11 +25,30 @@ public class RedDockSpinPark extends LinearOpMode {
         CRServo spinner = hardwareMap.crservo.get("spinner");
         Servo bucket = hardwareMap.servo.get("bucket");
         DcMotorEx lift = hardwareMap.get(DcMotorEx.class, "lift");
+        Stickygamepad g1 = new Stickygamepad(gamepad1);
+        long sleepTime3 = 0;
 
-        bucket.setPosition(0.3);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (!isStarted()){
+
+            g1.update();
+            if (g1.y)
+                sleepTime3 = 3000;
+            else if (g1.b)
+                sleepTime3 = 5000;
+            else if (g1.a)
+                sleepTime3 = 7000;
+            else if (g1.x)
+                sleepTime3 = 10000;
+            else if (g1.dpad_down)
+                sleepTime3 = 0;
+
+            telemetry.addData("current sleep time", "%d", sleepTime3);
+            telemetry.addData("press y for 3 second delay", "");
+            telemetry.addData("press b for 5 second delay","");
+            telemetry.addData("press a for 7 second delay","");
+            telemetry.addData("press x for 10 second delay","");
+            telemetry.addData("press dpad down to reset delay","");
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
             telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left / 1000,
                     frightFrenzy.freightFrenzyDetector.middle / 1000, frightFrenzy.freightFrenzyDetector.right / 1000);
@@ -44,6 +64,8 @@ public class RedDockSpinPark extends LinearOpMode {
         int liftLocation = frightFrenzy.freightFrenzyDetector.getLiftHeight();
 
         if (isStopRequested()) return;
+
+        sleep(sleepTime3);
 
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
