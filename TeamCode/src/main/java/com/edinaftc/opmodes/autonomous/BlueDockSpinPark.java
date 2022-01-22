@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.edinaftc.library.roadrunner.drive.SampleMecanumDrive;
+import com.edinaftc.library.util.Stickygamepad;
 import com.edinaftc.library.vision.freightfrenzy.FrightFrenzy;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -22,12 +23,27 @@ public class BlueDockSpinPark extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap);
         CRServo spinner = hardwareMap.crservo.get("spinner");
-        Servo bucket = hardwareMap.servo.get("bucket");
-        DcMotorEx lift = hardwareMap.get(DcMotorEx.class, "lift");
+        Stickygamepad g1 = new Stickygamepad(gamepad1);
+        long sleepTime = 0;
 
-        bucket.setPosition(0.3);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         while (!isStarted()){
+            g1.update();
+            if (g1.y)
+                sleepTime = 3000;
+            else if (g1.b)
+                sleepTime = 5000;
+            else if (g1.a)
+                sleepTime = 7000;
+            else if (g1.x)
+                sleepTime = 10000;
+            else if (g1.dpad_down)
+                sleepTime = 0;
+            telemetry.addData("current sleep time", "%d", sleepTime);
+            telemetry.addData("press y for 3 second delay", "");
+            telemetry.addData("press b for 5 second delay","");
+            telemetry.addData("press a for 7 second delay","");
+            telemetry.addData("press x for 10 second delay","");
+            telemetry.addData("press dpad down to reset delay","");
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
             telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left / 1000,
                     frightFrenzy.freightFrenzyDetector.middle / 1000, frightFrenzy.freightFrenzyDetector.right / 1000);
@@ -44,6 +60,8 @@ public class BlueDockSpinPark extends LinearOpMode {
 
         if (isStopRequested()) return;
 
+        sleep(sleepTime);
+
         Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose, true)
@@ -59,20 +77,6 @@ public class BlueDockSpinPark extends LinearOpMode {
                 .build();
 
         drive.followTrajectory(traj1);
-        lift.setTargetPosition(liftLocation);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setPower(1);
-        while (lift.isBusy()){
-            ;
-        }
-
-        sleep(2000);
-        bucket.setPosition(1);
-        sleep(2000);
-        bucket.setPosition(0);
-        lift.setTargetPosition(0);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setPower(1);
         drive.followTrajectory(traj2);
         spinner.setPower(.2);
         sleep(5000);
