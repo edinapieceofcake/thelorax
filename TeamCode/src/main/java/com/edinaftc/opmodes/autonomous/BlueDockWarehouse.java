@@ -21,11 +21,14 @@ public class BlueDockWarehouse extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap);
-        Servo bucket = hardwareMap.servo.get("bucket");
-        DcMotorEx lift = hardwareMap.get(DcMotorEx.class, "lift");
+        DcMotorEx vm = hardwareMap.get(DcMotorEx.class, "vm");
+        DcMotorEx hm = hardwareMap.get(DcMotorEx.class, "hm");
+        DcMotorEx intake = hardwareMap.get(DcMotorEx.class, "intake");
         Stickygamepad g1 = new Stickygamepad(gamepad1);
         long sleepTime2 = 0;
 
+        vm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         while (!isStarted()){
 
@@ -65,32 +68,40 @@ public class BlueDockWarehouse extends LinearOpMode {
 
         sleep(sleepTime2);
 
-        Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
+        vm.setTargetPosition(2500);
+        vm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        vm.setPower(.5);
+        sleep(500);
+        hm.setTargetPosition(-700);
+        hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hm.setPower(.75);
 
-        Trajectory traj1 = drive.trajectoryBuilder(startPose, true)
-                .strafeTo(new Vector2d(-23, 25)) // -5, 10 went to the up and right
-                .build();
+        // We want to start the bot at x: 10, y: -8, heading: 90 degrees
+        Pose2d startPose = new Pose2d(14, 66, Math.toRadians(180));
 
-        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .splineTo(new Vector2d(5, 0), Math.toRadians(270))
-                .forward(30)
+        drive.setPoseEstimate(startPose);
+
+        Trajectory traj1 = drive.trajectoryBuilder(startPose)
+                .strafeTo(new Vector2d(11, 50))
                 .build();
 
         drive.followTrajectory(traj1);
-        lift.setTargetPosition(liftLocation);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setPower(1);
-        while (lift.isBusy()){
-            ;
-        }
 
-        sleep(2000);
-        bucket.setPosition(1);
-        sleep(2000);
-        bucket.setPosition(0);
-        lift.setTargetPosition(0);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setPower(1);
+        intake.setPower(-.5);
+        sleep(500);
+        intake.setPower(0);
+        hm.setTargetPosition(0);
+        sleep(500);
+        vm.setTargetPosition(100);
+        // drop element
+        drive.turn(Math.toRadians(-180));
+
+        Trajectory traj2 = drive.trajectoryBuilder(drive.getPoseEstimate())
+                .splineTo(new Vector2d(34, 67), Math.toRadians(0))
+                .forward(10)
+                .build();
+
         drive.followTrajectory(traj2);
+        vm.setTargetPosition(0);
     }
 }
