@@ -89,7 +89,7 @@ public class Turret extends Subsystem{
 
         if (sharedHubButton) {
             sharedHubRunning = true;
-            vMotor.setTargetPosition(700);
+            vMotor.setTargetPosition(870);
             vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             vMotor.setPower(.75);
             sharedHubButton = false;
@@ -106,12 +106,12 @@ public class Turret extends Subsystem{
             }
 
             if (isRedTeleop) {
-                if (((vMotor.getCurrentPosition() < 720) && (vMotor.getCurrentPosition() > 680)) &&
+                if (((vMotor.getCurrentPosition() < 850) && (vMotor.getCurrentPosition() > 890)) &&
                         (hMotor.getCurrentPosition() > 1280)) {
                     resetStuff(0.0, 0.0);
                 }
             } else {
-                if (((vMotor.getCurrentPosition() < 720) && (vMotor.getCurrentPosition() > 680)) &&
+                if (((vMotor.getCurrentPosition() < 850) && (vMotor.getCurrentPosition() > 890)) &&
                         (hMotor.getCurrentPosition() < -1280)) {
                     resetStuff(0.0, 0.0);
                 }
