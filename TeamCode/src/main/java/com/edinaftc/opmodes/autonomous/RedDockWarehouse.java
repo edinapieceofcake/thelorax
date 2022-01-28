@@ -4,7 +4,9 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.edinaftc.library.roadrunner.drive.SampleMecanumDrive;
+import com.edinaftc.library.roadrunner.trajectorysequence.TrajectorySequence;
 import com.edinaftc.library.util.Stickygamepad;
+import com.edinaftc.library.vision.freightfrenzy.FreightFrenzyLocation;
 import com.edinaftc.library.vision.freightfrenzy.FrightFrenzy;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -21,11 +23,17 @@ public class RedDockWarehouse extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap);
-        Servo bucket = hardwareMap.servo.get("bucket");
-        DcMotorEx lift = hardwareMap.get(DcMotorEx.class, "lift");
+        FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap, "leftwebcam");
         Stickygamepad g1 = new Stickygamepad(gamepad1);
+        CRServo spinner = hardwareMap.crservo.get("spinner");
+        DcMotorEx vm = hardwareMap.get(DcMotorEx.class, "vm");
+        DcMotorEx hm = hardwareMap.get(DcMotorEx.class, "hm");
+        DcMotorEx intake = hardwareMap.get(DcMotorEx.class, "intake");
         long sleepTime4 = 0;
+        int vmPosition = 0;
+        int hmPosition = 0;
+        long xLocation = 0;
+        long yLocation = 0;
 
 
         while (!isStarted()){
@@ -60,39 +68,78 @@ public class RedDockWarehouse extends LinearOpMode {
             telemetry.update();
         }
 
-        int liftLocation = frightFrenzy.freightFrenzyDetector.getLiftHeight();
+        FreightFrenzyLocation location = frightFrenzy.freightFrenzyDetector.getLocation();
 
         if (isStopRequested()) return;
 
         sleep(sleepTime4);
 
-        Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
-
-        Trajectory traj1 = drive.trajectoryBuilder(startPose, true)
-                .strafeTo(new Vector2d(-23, -25)) // -5, 10 went to the up and right
-                .build();
-
-        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .splineTo(new Vector2d(6, 0), Math.toRadians(90))
-                .forward(30)
-                .build();
-
-        drive.followTrajectory(traj1);
-
-        lift.setTargetPosition(liftLocation);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setPower(1);
-        while (lift.isBusy()){
-            ;
+        if (location == FreightFrenzyLocation.left) {
+            vmPosition = 1032;
+            hmPosition = -1413;
+            xLocation = 4;
+            yLocation = -44;
+            sleepTime4 = 2250;
+        } else if (location == FreightFrenzyLocation.middle){
+            vmPosition = 1682;
+            hmPosition = -1413;
+            xLocation = 3;
+            yLocation = -43;
+            sleepTime4 = 2250;
+        } else {
+            vmPosition = 2188;
+            hmPosition = -1334;
+            xLocation = 0;
+            yLocation = -40;
+            sleepTime4 = 2250;
         }
 
+        // low
+        // vm = 1032
+        // hm = -1413
+        // x,y = 4, -44
+        // medium
+        // vm = 1682
+        // hm = -1413
+        // x,y = 4, -44
+        // high
+        // vm = 2108
+        // hm = -1334
+        // x,y = 0, -40
+
+        vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        vm.setTargetPosition(vmPosition);
+        vm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        vm.setPower(.5);
+        sleep(250);
+
+        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(new Pose2d(14, -66, Math.toRadians(0)))
+                .strafeTo(new Vector2d(xLocation, yLocation))
+                .build();
+        drive.followTrajectorySequence(traj1);
+
+        hm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hm.setTargetPosition(hmPosition);
+        hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hm.setPower(.5);
+        telemetry.addData("hm", hm.getCurrentPosition());
+        telemetry.addData("vm", vm.getCurrentPosition());
+        telemetry.update();
+        sleep(sleepTime4);
+        intake.setPower(-.5);
+        sleep(300);
+        intake.setPower(0);
+        hm.setTargetPosition(0);
+        sleep(500);
+        vm.setTargetPosition(400);
         sleep(2000);
-        bucket.setPosition(1);
-        sleep(2000);
-        bucket.setPosition(0);
-        lift.setTargetPosition(0);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setPower(1);
-        drive.followTrajectory(traj2);
+
+        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d(xLocation, yLocation, Math.toRadians(0)))
+                .strafeTo(new Vector2d(14, -65))
+                .forward(20)
+                .build();
+        drive.followTrajectorySequence(traj2);
+        vm.setTargetPosition(0);
+        sleep(500);
     }
 }

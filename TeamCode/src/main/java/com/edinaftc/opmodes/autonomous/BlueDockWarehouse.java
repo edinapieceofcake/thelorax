@@ -4,6 +4,8 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.edinaftc.library.roadrunner.drive.SampleMecanumDrive;
+import com.edinaftc.library.roadrunner.trajectorysequence.TrajectorySequence;
+import com.edinaftc.library.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import com.edinaftc.library.util.Stickygamepad;
 import com.edinaftc.library.vision.freightfrenzy.FrightFrenzy;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -20,7 +22,7 @@ public class BlueDockWarehouse extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap);
+        FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap, "rightwebcam");
         DcMotorEx vm = hardwareMap.get(DcMotorEx.class, "vm");
         DcMotorEx hm = hardwareMap.get(DcMotorEx.class, "hm");
         DcMotorEx intake = hardwareMap.get(DcMotorEx.class, "intake");
@@ -67,7 +69,7 @@ public class BlueDockWarehouse extends LinearOpMode {
         if (isStopRequested()) return;
 
         sleep(sleepTime2);
-
+/*
         vm.setTargetPosition(2500);
         vm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         vm.setPower(.5);
@@ -75,26 +77,43 @@ public class BlueDockWarehouse extends LinearOpMode {
         hm.setTargetPosition(-700);
         hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hm.setPower(.75);
-
+*/
         // We want to start the bot at x: 10, y: -8, heading: 90 degrees
-        Pose2d startPose = new Pose2d(14, 66, Math.toRadians(180));
+        vm.setTargetPosition(2500);
+        vm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hm.setTargetPosition(700);
+        hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        Pose2d startPose = new Pose2d(14, 66, Math.toRadians(0));
 
         drive.setPoseEstimate(startPose);
 
+        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startPose)
+                .addTemporalMarker(() -> {
+                    vm.setPower(.5);
+                })
+                .strafeTo(new Vector2d(0, 50))
+                .addTemporalMarker(.5, () -> {
+                    hm.setPower(.75);
+                })
+                .build();
+
+        drive.followTrajectorySequence(traj1);
+/*
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .strafeTo(new Vector2d(11, 50))
+                .strafeTo(new Vector2d(0, 50))
                 .build();
 
         drive.followTrajectory(traj1);
-
+*/
+        // drop element
         intake.setPower(-.5);
-        sleep(500);
+        sleep(200);
         intake.setPower(0);
+        /*
         hm.setTargetPosition(0);
         sleep(500);
         vm.setTargetPosition(100);
-        // drop element
-        drive.turn(Math.toRadians(-180));
 
         Trajectory traj2 = drive.trajectoryBuilder(drive.getPoseEstimate())
                 .splineTo(new Vector2d(34, 67), Math.toRadians(0))
@@ -102,6 +121,20 @@ public class BlueDockWarehouse extends LinearOpMode {
                 .build();
 
         drive.followTrajectory(traj2);
+        */
+        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(startPose)
+                .addTemporalMarker(() -> {
+                    hm.setTargetPosition(0);
+                })
+                .strafeTo(new Vector2d(14, 66))
+                .addTemporalMarker(.5, () -> {
+                    vm.setTargetPosition(100);
+                })
+                .forward(20)
+                .build();
+
+        drive.followTrajectorySequence(traj2);
+
         vm.setTargetPosition(0);
     }
 }

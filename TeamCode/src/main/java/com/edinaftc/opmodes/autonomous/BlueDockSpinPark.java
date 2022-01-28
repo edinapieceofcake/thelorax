@@ -21,10 +21,17 @@ public class BlueDockSpinPark extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap);
+        FrightFrenzy frightFrenzy = new FrightFrenzy(hardwareMap, "rightwebcam");
         CRServo spinner = hardwareMap.crservo.get("spinner");
+        DcMotorEx vm = hardwareMap.get(DcMotorEx.class, "vm");
+        DcMotorEx hm = hardwareMap.get(DcMotorEx.class, "hm");
+        DcMotorEx intake = hardwareMap.get(DcMotorEx.class, "intake");
         Stickygamepad g1 = new Stickygamepad(gamepad1);
         long sleepTime = 0;
+        int vmPosition = 0;
+        int hmPosition = 0;
+        long xLocation = 0;
+        long yLocation = 0;
 
         while (!isStarted()){
             g1.update();
@@ -62,25 +69,5 @@ public class BlueDockSpinPark extends LinearOpMode {
 
         sleep(sleepTime);
 
-        Pose2d startPose = new Pose2d(0, 0, Math.toRadians(0));
-
-        Trajectory traj1 = drive.trajectoryBuilder(startPose, true)
-                .strafeTo(new Vector2d(-21, -26)) // -5, 10 went to the up and right
-                .build();
-
-        Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .strafeTo(new Vector2d(-6, 24))
-                .build();
-
-        Trajectory traj3 = drive.trajectoryBuilder(traj1.end())
-                .back(21)
-                .build();
-
-        drive.followTrajectory(traj1);
-        drive.followTrajectory(traj2);
-        spinner.setPower(.2);
-        sleep(5000);
-        spinner.setPower(0);
-        drive.followTrajectory(traj3);
     }
 }

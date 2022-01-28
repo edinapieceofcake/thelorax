@@ -22,9 +22,9 @@ public class FreightFrenzyDetector extends OpenCvPipeline {
     private Scalar WHITE = new Scalar(255,255,255);
     private Scalar RED = new Scalar(255, 0, 0);
 
-    public double cx0 = 50;
+    public double cx0 = 240;
     public double cy0 = 370;
-    public double cx1 = 440;
+    public double cx1 = 580;
     public double cy1 = 370;
     public double cx2 = 890;
     public double cy2 = 370;

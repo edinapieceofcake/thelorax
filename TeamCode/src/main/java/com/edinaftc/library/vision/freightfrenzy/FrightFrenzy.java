@@ -41,9 +41,9 @@ public class FrightFrenzy {
     OpenCvWebcam webcam;
     public FreightFrenzyDetector freightFrenzyDetector = new FreightFrenzyDetector();
 
-    public FrightFrenzy(HardwareMap hardwareMap) {
+    public FrightFrenzy(HardwareMap hardwareMap, String webcamName) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, webcamName), cameraMonitorViewId);
 
         // OR...  Do Not Activate the Camera Monitor View
         //webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
