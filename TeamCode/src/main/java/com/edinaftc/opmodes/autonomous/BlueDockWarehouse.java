@@ -7,6 +7,7 @@ import com.edinaftc.library.roadrunner.drive.SampleMecanumDrive;
 import com.edinaftc.library.roadrunner.trajectorysequence.TrajectorySequence;
 import com.edinaftc.library.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import com.edinaftc.library.util.Stickygamepad;
+import com.edinaftc.library.vision.freightfrenzy.FreightFrenzyLocation;
 import com.edinaftc.library.vision.freightfrenzy.FrightFrenzy;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,6 +29,13 @@ public class BlueDockWarehouse extends LinearOpMode {
         DcMotorEx intake = hardwareMap.get(DcMotorEx.class, "intake");
         Stickygamepad g1 = new Stickygamepad(gamepad1);
         long sleepTime2 = 0;
+        int vmPosition = 0;
+        int hmPosition = 0;
+        double xLocation = 0;
+        double yLocation = 0;
+        frightFrenzy.freightFrenzyDetector.cx0 = 140;
+        frightFrenzy.freightFrenzyDetector.cx1 = 490;
+        frightFrenzy.freightFrenzyDetector.cx2 = 790;
 
         vm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -64,77 +72,65 @@ public class BlueDockWarehouse extends LinearOpMode {
             telemetry.update();
         }
 
-        int liftLocation = frightFrenzy.freightFrenzyDetector.getLiftHeight();
+        FreightFrenzyLocation location = frightFrenzy.freightFrenzyDetector.getLocation();
 
         if (isStopRequested()) return;
 
         sleep(sleepTime2);
-/*
-        vm.setTargetPosition(2500);
+
+        if (location == FreightFrenzyLocation.left) {
+            vmPosition = 1032;
+            hmPosition = 1413;
+            xLocation = 4;
+            yLocation = 43;
+            sleepTime2 = 2250;
+        } else if (location == FreightFrenzyLocation.middle){
+            vmPosition = 1682;
+            hmPosition = 1413;
+            xLocation = 3;
+            yLocation = 43;
+            sleepTime2 = 2250;
+        } else {
+            vmPosition = 2188;
+            hmPosition = 1334;
+            xLocation = 0;
+            yLocation = 40;
+            sleepTime2 = 2250;
+        }
+
+        vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        vm.setTargetPosition(vmPosition);
         vm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         vm.setPower(.5);
-        sleep(500);
-        hm.setTargetPosition(-700);
-        hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hm.setPower(.75);
-*/
-        // We want to start the bot at x: 10, y: -8, heading: 90 degrees
-        vm.setTargetPosition(2500);
-        vm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        hm.setTargetPosition(700);
-        hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(250);
 
-        Pose2d startPose = new Pose2d(14, 66, Math.toRadians(0));
-
-        drive.setPoseEstimate(startPose);
-
-        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(startPose)
-                .addTemporalMarker(() -> {
-                    vm.setPower(.5);
-                })
-                .strafeTo(new Vector2d(0, 50))
-                .addTemporalMarker(.5, () -> {
-                    hm.setPower(.75);
-                })
+        TrajectorySequence traj1 = drive.trajectorySequenceBuilder(new Pose2d(14, 66, Math.toRadians(0)))
+                .strafeTo(new Vector2d(xLocation, yLocation))
                 .build();
-
         drive.followTrajectorySequence(traj1);
-/*
-        Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .strafeTo(new Vector2d(0, 50))
-                .build();
 
-        drive.followTrajectory(traj1);
-*/
-        // drop element
+        hm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hm.setTargetPosition(hmPosition);
+        hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hm.setPower(.5);
+        telemetry.addData("hm", hm.getCurrentPosition());
+        telemetry.addData("vm", vm.getCurrentPosition());
+        telemetry.update();
+        sleep(sleepTime2);
         intake.setPower(-.5);
-        sleep(200);
+        sleep(300);
         intake.setPower(0);
-        /*
         hm.setTargetPosition(0);
         sleep(500);
-        vm.setTargetPosition(100);
+        vm.setTargetPosition(400);
+        sleep(2000);
 
-        Trajectory traj2 = drive.trajectoryBuilder(drive.getPoseEstimate())
-                .splineTo(new Vector2d(34, 67), Math.toRadians(0))
-                .forward(10)
-                .build();
-
-        drive.followTrajectory(traj2);
-        */
-        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(startPose)
-                .addTemporalMarker(() -> {
-                    hm.setTargetPosition(0);
-                })
-                .strafeTo(new Vector2d(14, 66))
-                .addTemporalMarker(.5, () -> {
-                    vm.setTargetPosition(100);
-                })
+        TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d(xLocation, yLocation, Math.toRadians(0)))
+                .strafeTo(new Vector2d(14, 65))
                 .forward(20)
                 .build();
-
         drive.followTrajectorySequence(traj2);
-
         vm.setTargetPosition(0);
+        sleep(500);
     }
 }
