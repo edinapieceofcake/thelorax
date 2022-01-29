@@ -33,9 +33,9 @@ public class BlueDockWarehouse extends LinearOpMode {
         int hmPosition = 0;
         double xLocation = 0;
         double yLocation = 0;
-        frightFrenzy.freightFrenzyDetector.cx0 = 140;
-        frightFrenzy.freightFrenzyDetector.cx1 = 490;
-        frightFrenzy.freightFrenzyDetector.cx2 = 790;
+        frightFrenzy.freightFrenzyDetector.cx0 = 210;
+        frightFrenzy.freightFrenzyDetector.cx1 = 560;
+        frightFrenzy.freightFrenzyDetector.cx2 = 860;
 
         vm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -88,10 +88,10 @@ public class BlueDockWarehouse extends LinearOpMode {
             vmPosition = 1682;
             hmPosition = 1413;
             xLocation = 3;
-            yLocation = 43;
+            yLocation = 42;
             sleepTime2 = 2250;
         } else {
-            vmPosition = 2188;
+            vmPosition = 2288;
             hmPosition = 1334;
             xLocation = 0;
             yLocation = 40;
@@ -126,8 +126,9 @@ public class BlueDockWarehouse extends LinearOpMode {
         sleep(2000);
 
         TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d(xLocation, yLocation, Math.toRadians(0)))
-                .strafeTo(new Vector2d(14, 65))
-                .forward(20)
+                .strafeTo(new Vector2d(14, 64.5))
+                .forward(25)
+                .strafeRight(25)
                 .build();
         drive.followTrajectorySequence(traj2);
         vm.setTargetPosition(0);

@@ -32,8 +32,8 @@ public class RedDockWarehouse extends LinearOpMode {
         long sleepTime4 = 0;
         int vmPosition = 0;
         int hmPosition = 0;
-        long xLocation = 0;
-        long yLocation = 0;
+        double xLocation = 0;
+        double yLocation = 0;
 
 
         while (!isStarted()){
@@ -75,22 +75,22 @@ public class RedDockWarehouse extends LinearOpMode {
         sleep(sleepTime4);
 
         if (location == FreightFrenzyLocation.left) {
-            vmPosition = 1032;
+            vmPosition = 1132;
             hmPosition = -1413;
-            xLocation = 4;
-            yLocation = -44;
+            xLocation = 3.5;
+            yLocation = -43.5;
             sleepTime4 = 2250;
         } else if (location == FreightFrenzyLocation.middle){
             vmPosition = 1682;
             hmPosition = -1413;
-            xLocation = 3;
-            yLocation = -43;
+            xLocation = 1;
+            yLocation = -41;
             sleepTime4 = 2250;
         } else {
             vmPosition = 2188;
             hmPosition = -1334;
-            xLocation = 0;
-            yLocation = -40;
+            xLocation = -2;
+            yLocation = -38;
             sleepTime4 = 2250;
         }
 
@@ -136,7 +136,8 @@ public class RedDockWarehouse extends LinearOpMode {
 
         TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d(xLocation, yLocation, Math.toRadians(0)))
                 .strafeTo(new Vector2d(14, -65))
-                .forward(20)
+                .forward(25)
+                .strafeLeft(28)
                 .build();
         drive.followTrajectorySequence(traj2);
         vm.setTargetPosition(0);

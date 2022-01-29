@@ -34,9 +34,9 @@ public class BlueDockSpinPark extends LinearOpMode {
         int hmPosition = 0;
         long xLocation = 0;
         long yLocation = 0;
-        frightFrenzy.freightFrenzyDetector.cx0 = 140;
-        frightFrenzy.freightFrenzyDetector.cx1 = 490;
-        frightFrenzy.freightFrenzyDetector.cx2 = 790;
+        frightFrenzy.freightFrenzyDetector.cx0 = 210;
+        frightFrenzy.freightFrenzyDetector.cx1 = 560;
+        frightFrenzy.freightFrenzyDetector.cx2 = 860;
 
         while (!isStarted()){
             g1.update();
@@ -124,9 +124,11 @@ public class BlueDockSpinPark extends LinearOpMode {
                 .build();
         drive.followTrajectorySequence(traj2);
 
-        sleep(2000);
+        spinner.setPower(.3);
+        sleep(5000);
+        spinner.setPower(0);
         TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d(-61, 61, Math.toRadians(0)))
-                .strafeTo(new Vector2d(-63, 40))
+                .strafeTo(new Vector2d(-63, 38))
                 .build();
         drive.followTrajectorySequence(traj3);
         vm.setTargetPosition(0);

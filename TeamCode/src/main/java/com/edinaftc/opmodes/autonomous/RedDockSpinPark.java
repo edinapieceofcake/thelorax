@@ -33,9 +33,10 @@ public class RedDockSpinPark extends LinearOpMode {
         long sleepTime3 = 0;
         int vmPosition = 0;
         int hmPosition = 0;
-        long xLocation = 0;
-        long yLocation = 0;
-
+        double xLocation = 0;
+        double yLocation = 0;
+        double spinX = -62;
+        double spinY = -62;
 
         while (!isStarted()){
 
@@ -78,21 +79,22 @@ public class RedDockSpinPark extends LinearOpMode {
         if (location == FreightFrenzyLocation.left) {
             vmPosition = 1264;
             hmPosition = -662;
-            xLocation = -20;
-            yLocation = -46;
-            sleepTime3 = 1000;
+            xLocation = -19;
+            yLocation = -45.5;
+            sleepTime3 = 1200;
         } else if (location == FreightFrenzyLocation.middle){
             vmPosition = 1882;
             hmPosition = -700;
             xLocation = -18;
             yLocation = -45;
-            sleepTime3 = 1000;
+            sleepTime3 = 1200;
         } else {
             vmPosition = 2400;
             hmPosition = -740;
             xLocation = -18;
             yLocation = -40;
             sleepTime3 = 2250;
+            spinY = -63;
         }
 
         vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -122,13 +124,15 @@ public class RedDockSpinPark extends LinearOpMode {
         sleep(2000);
 
         TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d(xLocation, yLocation, Math.toRadians(0)))
-                .strafeTo(new Vector2d(-61, -61))
+                .strafeTo(new Vector2d(spinX, spinY))
                 .build();
         drive.followTrajectorySequence(traj2);
 
-        sleep(2000);
-        TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d(-61, -61, Math.toRadians(0)))
-                .strafeTo(new Vector2d(-67, -40))
+        spinner.setPower(-.3);
+        sleep(5000);
+        spinner.setPower(0);
+        TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d(spinX, spinY, Math.toRadians(0)))
+                .strafeTo(new Vector2d(-67, -38))
                 .build();
         drive.followTrajectorySequence(traj3);
         vm.setTargetPosition(0);
