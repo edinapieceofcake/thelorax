@@ -49,7 +49,7 @@ public class MecanumDrive extends Subsystem{
             rotationStickSpeed = .8;
             driveStickSpeed = .8;
         } else {
-            driveStickSpeed = rotationStickSpeed = .4;
+            driveStickSpeed = rotationStickSpeed = .6;
         }
     }
 

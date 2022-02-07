@@ -31,7 +31,7 @@ public class BlueTeleOp extends OpMode {
 
         robot.servo.spin(-gamepad2.left_trigger);
 
-        robot.turret.moveArm(-gamepad2.right_stick_x, -gamepad2.left_stick_y, _gamepad2.y, _gamepad2.x, _gamepad2.b, false);
+        robot.turret.moveArm(gamepad2.left_stick_x, -gamepad2.left_stick_y, _gamepad2.y, _gamepad2.x, _gamepad2.b, false);
 
         robot.drive.displayTelemetry(telemetry);
         robot.turret.displayTelemetry(telemetry);

@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.opencv.core.Mat;
 
 
 public class Turret extends Subsystem{
@@ -17,6 +18,7 @@ public class Turret extends Subsystem{
     private boolean turretRecenterRunning;
     private boolean allianceHubButton;
     private boolean allianceHubRunning;
+    private boolean raisingForRecenter;
     private boolean isRedTeleop;
     double xPower;
     double yPower;
@@ -26,11 +28,11 @@ public class Turret extends Subsystem{
         hMotor = map.get(DcMotorEx.class, "hm");
 
         vMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        vMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //vMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         hMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        hMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //hMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         sharedHubButton = false;
         sharedHubRunning = false;
@@ -38,6 +40,7 @@ public class Turret extends Subsystem{
         turretRecenterRunning = false;
         allianceHubButton = false;
         allianceHubRunning = false;
+        raisingForRecenter = false;
         isRedTeleop = false;
     }
 
@@ -55,7 +58,7 @@ public class Turret extends Subsystem{
             allianceHubRunning = true;
             vMotor.setTargetPosition(2500);
             vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            vMotor.setPower(.75);
+            vMotor.setPower(1);
             allianceHubButton = false;
         }
 
@@ -67,7 +70,7 @@ public class Turret extends Subsystem{
                     hMotor.setTargetPosition(1300);
 
                 hMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hMotor.setPower(.75);
+                hMotor.setPower(1);
             }
 
             if (isRedTeleop) {
@@ -89,9 +92,9 @@ public class Turret extends Subsystem{
 
         if (sharedHubButton) {
             sharedHubRunning = true;
-            vMotor.setTargetPosition(700);
+            vMotor.setTargetPosition(750);
             vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            vMotor.setPower(.75);
+            vMotor.setPower(1);
             sharedHubButton = false;
         }
 
@@ -102,7 +105,7 @@ public class Turret extends Subsystem{
                 else
                     hMotor.setTargetPosition(-1300);
                 hMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hMotor.setPower(.75);
+                hMotor.setPower(1);
             }
 
             if (isRedTeleop) {
@@ -124,13 +127,29 @@ public class Turret extends Subsystem{
 
         if (turretRecenter) {
             turretRecenterRunning = true;
-            hMotor.setTargetPosition(0);
-            hMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hMotor.setPower(.75);
+            if (vMotor.getCurrentPosition() > 600) {
+                hMotor.setTargetPosition(0);
+                hMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hMotor.setPower(1);
+            } else {
+                vMotor.setTargetPosition(600);
+                vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                vMotor.setPower(1);
+                raisingForRecenter = true;
+            }
             turretRecenter = false;
         }
 
         if (turretRecenterRunning) {
+            if (raisingForRecenter && (vMotor.getCurrentPosition() > 580)) {
+                raisingForRecenter = false;
+                vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                vMotor.setPower(0);
+                hMotor.setTargetPosition(0);
+                hMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hMotor.setPower(1);
+            }
+
             if ((hMotor.getCurrentPosition() <= 250) && (hMotor.getCurrentPosition() >= -250) && !vMotor.isBusy()) {
                 vMotor.setTargetPosition(100);
                 vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -148,8 +167,21 @@ public class Turret extends Subsystem{
         }
 
         if (!sharedHubRunning && !turretRecenterRunning && !allianceHubRunning) {
-            hMotor.setPower(xPower);
-            vMotor.setPower(yPower);
+            if (vMotor.getCurrentPosition() < 450) {
+                if ((Math.abs(hMotor.getCurrentPosition()) > 700) || (Math.abs(hMotor.getCurrentPosition()) < 100)){
+                    hMotor.setPower(Math.pow(xPower, 3));
+                } else if ((hMotor.getCurrentPosition() > -700) && (hMotor.getCurrentPosition() < 0) && (xPower < 0)) {
+                    hMotor.setPower(Math.pow(xPower, 3));
+                } else if ((hMotor.getCurrentPosition() < 700) && (hMotor.getCurrentPosition() > 0) && (xPower > 0)) {
+                    hMotor.setPower(Math.pow(xPower, 3));
+                } else {
+                    hMotor.setPower(0);
+                }
+            } else {
+                hMotor.setPower(Math.pow(xPower, 3));
+            }
+
+            vMotor.setPower(Math.pow(yPower, 3));
         }
     }
 
@@ -157,6 +189,7 @@ public class Turret extends Subsystem{
         allianceHubRunning = false;
         sharedHubRunning = false;
         turretRecenterRunning = false;
+        raisingForRecenter = false;
         hMotor.setPower(xPower);
         vMotor.setPower(yPower);
         vMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -170,53 +203,7 @@ public class Turret extends Subsystem{
         telemetry.addData("shared", sharedHubRunning);
         telemetry.addData("alliance", allianceHubRunning);
         telemetry.addData("isRed", isRedTeleop);
+        telemetry.addData("xPower", xPower);
+        telemetry.addData("yPower", yPower);
     }
-
 }
-
-/*{
-    private DcMotorEx _lift;
-    private Servo _bucket;
-    private double _power;
-    private double _trigger;
-    private boolean _movingUp;
-
-    public Turret(HardwareMap map){
-        _lift = map.get(DcMotorEx.class,"lift");
-        _lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        _lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        _lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        _bucket = map.get(Servo.class,"bucket");
-        _movingUp = false;
-    }
-
-    public void update(){
-        if (_trigger <= 0.8)
-            if ((_lift.getCurrentPosition() > 150) && _movingUp)
-                _bucket.setPosition(.45);
-            else
-                _bucket.setPosition(-1);
-        else
-            _bucket.setPosition(1);
-
-        _lift.setPower(-_power);
-
-    }
-
-    public void setLiftPower(double power, double trigger){
-        _power = power;
-        _trigger = trigger;
-        if (_power < 0)
-            _movingUp = true;
-        else if (_power > 0)
-            _movingUp = false;
-    }
-
-    public void displayTelemetry(Telemetry telemetry) {
-        telemetry.addData("lift", "%d", _lift.getCurrentPosition());
-        telemetry.addData("trigger", "%f", _trigger);
-        telemetry.addData("power", "%f", _power);
-        telemetry.addData("up", "%s", _movingUp);
-        telemetry.addData("bucket", "%f", _bucket.getPosition());
-    }
-}*/
