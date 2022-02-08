@@ -128,10 +128,6 @@ public class BlueDockWarehouse extends LinearOpMode {
                 .build();
         drive.followTrajectorySequence(trajectory);
 
-        telemetry.addData("hm", hm.getCurrentPosition());
-        telemetry.addData("vm", vm.getCurrentPosition());
-        telemetry.update();
-
         if (location == FreightFrenzyLocation.left) {
             intake.setPower(-1);
         } else {
@@ -220,7 +216,7 @@ public class BlueDockWarehouse extends LinearOpMode {
         trajectory = drive.trajectorySequenceBuilder(new Pose2d(-1, 39, Math.toRadians(0)))
                 .strafeTo(new Vector2d(12, 64.5))
                 .addDisplacementMarker(() -> hm.setTargetPosition(0))
-                .forward(35)
+                .forward(25)
                 .addDisplacementMarker(() -> vm.setTargetPosition(200))
                 .strafeRight(25)
                 .turn(Math.toRadians(90))

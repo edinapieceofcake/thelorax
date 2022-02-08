@@ -32,8 +32,8 @@ public class BlueDockSpinPark extends LinearOpMode {
         long sleepTime = 0;
         int vmPosition = 0;
         int hmPosition = 0;
-        long xLocation = 0;
-        long yLocation = 0;
+        double xLocation = 0;
+        double yLocation = 0;
         frightFrenzy.freightFrenzyDetector.cx0 = 110;
         frightFrenzy.freightFrenzyDetector.cx1 = 410;
         frightFrenzy.freightFrenzyDetector.cx2 = 730;
@@ -50,13 +50,27 @@ public class BlueDockSpinPark extends LinearOpMode {
                 sleepTime = 10000;
             else if (g1.dpad_down)
                 sleepTime = 0;
+
+            if (g1.left_bumper) {
+                frightFrenzy.freightFrenzyDetector.cx0 -= 10;
+                frightFrenzy.freightFrenzyDetector.cx1 -= 10;
+                frightFrenzy.freightFrenzyDetector.cx2 -= 10;
+            } else if (g1.right_bumper) {
+                frightFrenzy.freightFrenzyDetector.cx0 += 10;
+                frightFrenzy.freightFrenzyDetector.cx1 += 10;
+                frightFrenzy.freightFrenzyDetector.cx2 += 10;
+            }
+
             telemetry.addData("current sleep time", "%d", sleepTime);
             telemetry.addData("press y for 3 second delay", "");
             telemetry.addData("press b for 5 second delay","");
             telemetry.addData("press a for 7 second delay","");
             telemetry.addData("press x for 10 second delay","");
             telemetry.addData("press dpad down to reset delay","");
+            telemetry.addData("press left bumper to move dots left", "");
+            telemetry.addData("press right bumber to move dots right", "");
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
+            telemetry.addData("left dot location", frightFrenzy.freightFrenzyDetector.cx0);
             telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left / 1000,
                     frightFrenzy.freightFrenzyDetector.middle / 1000, frightFrenzy.freightFrenzyDetector.right / 1000);
             telemetry.addData("l r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.leftR / 1000,
@@ -74,16 +88,16 @@ public class BlueDockSpinPark extends LinearOpMode {
 
         sleep(sleepTime);
         if (location == FreightFrenzyLocation.left) {
-            vmPosition = 1164;
+            vmPosition = 1064;
             hmPosition = 662;
-            xLocation = -20;
-            yLocation = 45;
+            xLocation = -19;
+            yLocation = 50;
             sleepTime = 1000;
         } else if (location == FreightFrenzyLocation.middle){
             vmPosition = 1882;
             hmPosition = 700;
             xLocation = -18;
-            yLocation = 45;
+            yLocation = 43;
             sleepTime = 1000;
         } else {
             vmPosition = 2400;

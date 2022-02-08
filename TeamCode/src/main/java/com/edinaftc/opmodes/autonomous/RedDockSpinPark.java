@@ -39,7 +39,6 @@ public class RedDockSpinPark extends LinearOpMode {
         double spinY = -62;
 
         while (!isStarted()){
-
             g1.update();
             if (g1.y)
                 sleepTime3 = 3000;
@@ -52,13 +51,26 @@ public class RedDockSpinPark extends LinearOpMode {
             else if (g1.dpad_down)
                 sleepTime3 = 0;
 
+            if (g1.left_bumper) {
+                frightFrenzy.freightFrenzyDetector.cx0 -= 10;
+                frightFrenzy.freightFrenzyDetector.cx1 -= 10;
+                frightFrenzy.freightFrenzyDetector.cx2 -= 10;
+            } else if (g1.right_bumper) {
+                frightFrenzy.freightFrenzyDetector.cx0 += 10;
+                frightFrenzy.freightFrenzyDetector.cx1 += 10;
+                frightFrenzy.freightFrenzyDetector.cx2 += 10;
+            }
+
             telemetry.addData("current sleep time", "%d", sleepTime3);
             telemetry.addData("press y for 3 second delay", "");
             telemetry.addData("press b for 5 second delay","");
             telemetry.addData("press a for 7 second delay","");
             telemetry.addData("press x for 10 second delay","");
             telemetry.addData("press dpad down to reset delay","");
+            telemetry.addData("press left bumper to move dots left", "");
+            telemetry.addData("press right bumber to move dots right", "");
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
+            telemetry.addData("left dot location", frightFrenzy.freightFrenzyDetector.cx0);
             telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left / 1000,
                     frightFrenzy.freightFrenzyDetector.middle / 1000, frightFrenzy.freightFrenzyDetector.right / 1000);
             telemetry.addData("l r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.leftR / 1000,

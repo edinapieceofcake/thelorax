@@ -42,7 +42,6 @@ public class RedDockWarehouse extends LinearOpMode {
 
 
         while (!isStarted()){
-
             g1.update();
             if (g1.y)
                 sleepTime4 = 3000;
@@ -55,13 +54,26 @@ public class RedDockWarehouse extends LinearOpMode {
             else if (g1.dpad_down)
                 sleepTime4 = 0;
 
+            if (g1.left_bumper) {
+                frightFrenzy.freightFrenzyDetector.cx0 -= 10;
+                frightFrenzy.freightFrenzyDetector.cx1 -= 10;
+                frightFrenzy.freightFrenzyDetector.cx2 -= 10;
+            } else if (g1.right_bumper) {
+                frightFrenzy.freightFrenzyDetector.cx0 += 10;
+                frightFrenzy.freightFrenzyDetector.cx1 += 10;
+                frightFrenzy.freightFrenzyDetector.cx2 += 10;
+            }
+
             telemetry.addData("current sleep time", "%d", sleepTime4);
             telemetry.addData("press y for 3 second delay", "");
             telemetry.addData("press b for 5 second delay","");
             telemetry.addData("press a for 7 second delay","");
             telemetry.addData("press x for 10 second delay","");
             telemetry.addData("press dpad down to reset delay","");
+            telemetry.addData("press left bumper to move dots left", "");
+            telemetry.addData("press right bumber to move dots right", "");
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
+            telemetry.addData("left dot location", frightFrenzy.freightFrenzyDetector.cx0);
             telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left / 1000,
                     frightFrenzy.freightFrenzyDetector.middle / 1000, frightFrenzy.freightFrenzyDetector.right / 1000);
             telemetry.addData("l r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.leftR / 1000,
@@ -80,16 +92,16 @@ public class RedDockWarehouse extends LinearOpMode {
         sleep(sleepTime4);
 
         if (location == FreightFrenzyLocation.left) {
-            vmPosition = 1032;
-            hmPosition = -1413;
-            xLocation = 2;
-            yLocation = -43;
+            vmPosition = 1170;
+            hmPosition = -1388;
+            xLocation = 3;
+            yLocation = -46.5;
             sleepTime4 = 2250;
         } else if (location == FreightFrenzyLocation.middle){
             vmPosition = 1682;
             hmPosition = -1413;
-            xLocation = 1;
-            yLocation = -41;
+            xLocation = 2;
+            yLocation = -42;
             sleepTime4 = 2250;
         } else {
             vmPosition = 2188;
@@ -128,38 +140,45 @@ public class RedDockWarehouse extends LinearOpMode {
                 .build();
         drive.followTrajectorySequence(trajectory);
 
-        telemetry.addData("hm", hm.getCurrentPosition());
-        telemetry.addData("vm", vm.getCurrentPosition());
-        telemetry.update();
-        intake.setPower(-.5);
+        if (location == FreightFrenzyLocation.left) {
+            intake.setPower(-1);
+        } else {
+            intake.setPower(-.5);
+        }
+
         sleep(300);
         intake.setPower(0);
         hm.setTargetPosition(0);
-        sleep(250);
-        vm.setTargetPosition(80);
 
         // first time in
         intake.setPower(.5);
         trajectory = drive.trajectorySequenceBuilder(new Pose2d(xLocation, yLocation, Math.toRadians(0)))
                 .strafeTo(new Vector2d(12, -65))
-                .forward(34)
+                .addDisplacementMarker(() -> vm.setTargetPosition(500))
+                .forward(15)
+                .addDisplacementMarker(() -> {
+                    vm.setTargetPosition(150);
+                    intake.setPower(.5);
+                })
+                .forward(15)
+                .addDisplacementMarker(() -> vm.setTargetPosition(100))
+                .forward(4)
                 .build();
 
         drive.followTrajectorySequence(trajectory);
         vm.setTargetPosition(-75);
-        sleep(300);
+        sleep(250);
         intake.setPower(0);
-        vm.setTargetPosition(85);
+
+        vm.setTargetPosition(2288);
+        sleep(150);
 
         // the 42 comes from the 30 + 12
         trajectory = drive.trajectorySequenceBuilder(new Pose2d(46, -65, Math.toRadians(0)))
                 .back(34)
-                .strafeTo(new Vector2d(-2, -38))
+                .addDisplacementMarker(() -> hm.setTargetPosition(-1334))
+                .strafeTo(new Vector2d(0, -40))
                 .build();
-
-        vm.setTargetPosition(2288);
-        sleep(250);
-        hm.setTargetPosition(-1334);
 
         drive.followTrajectorySequence(trajectory);
 
@@ -167,49 +186,54 @@ public class RedDockWarehouse extends LinearOpMode {
         sleep(300);
         intake.setPower(0);
         hm.setTargetPosition(0);
-        sleep(250);
-        vm.setTargetPosition(85);
-        intake.setPower(.5);
 
         // the -2, -38 comes from the strafeto position
-        trajectory = drive.trajectorySequenceBuilder(new Pose2d(-2, -38, Math.toRadians(0)))
+        trajectory = drive.trajectorySequenceBuilder(new Pose2d(0, -40, Math.toRadians(0)))
                 .strafeTo(new Vector2d(12, -65))
-                .forward(36)
+                .addDisplacementMarker(() -> vm.setTargetPosition(500))
+                .forward(16)
+                .addDisplacementMarker(() -> {
+                    vm.setTargetPosition(150);
+                    intake.setPower(.5);
+                })
+                .forward(16)
+                .addDisplacementMarker(() -> vm.setTargetPosition(100))
+                .forward(4)
                 .build();
 
         drive.followTrajectorySequence(trajectory);
         vm.setTargetPosition(-75);
         sleep(300);
         intake.setPower(0);
-        vm.setTargetPosition(85);
 
         // the 42 comes from the 30 + 12
+        vm.setTargetPosition(2288);
+        sleep(150);
+
         trajectory = drive.trajectorySequenceBuilder(new Pose2d(48, -65, Math.toRadians(0)))
                 .back(36)
-                .strafeTo(new Vector2d(-2, -38))
+                .addDisplacementMarker(() -> hm.setTargetPosition(-1334))
+                .strafeTo(new Vector2d(0, -40))
                 .build();
-
-        vm.setTargetPosition(2288);
-        sleep(250);
-        hm.setTargetPosition(-1334);
 
         drive.followTrajectorySequence(trajectory);
 
         intake.setPower(-.5);
         sleep(300);
         intake.setPower(0);
-        hm.setTargetPosition(0);
-        sleep(250);
-        vm.setTargetPosition(100);
 
-        trajectory = drive.trajectorySequenceBuilder(new Pose2d(-2, -38, Math.toRadians(0)))
+        trajectory = drive.trajectorySequenceBuilder(new Pose2d(-0, -40, Math.toRadians(0)))
                 .strafeTo(new Vector2d(14, -65))
+                .addDisplacementMarker(() -> hm.setTargetPosition(0))
                 .forward(25)
-                .strafeLeft(15)
+                .addDisplacementMarker(() -> vm.setTargetPosition(200))
+                .strafeLeft(25)
+                .turn(Math.toRadians(-90))
+                .strafeRight(15)
                 .build();
 
         drive.followTrajectorySequence(trajectory);
-        vm.setTargetPosition(0);
+
         sleep(1000);
     }
 }
