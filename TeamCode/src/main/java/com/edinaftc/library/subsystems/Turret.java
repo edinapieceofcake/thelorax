@@ -55,11 +55,16 @@ public class Turret extends Subsystem{
 
     public void update(){
         if (allianceHubButton) {
-            allianceHubRunning = true;
             vMotor.setTargetPosition(2500);
             vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             vMotor.setPower(1);
+            allianceHubRunning = true;
             allianceHubButton = false;
+            sharedHubRunning = false;
+            sharedHubButton = false;
+            raisingForRecenter = false;
+            turretRecenterRunning = false;
+            turretRecenter = false;
         }
 
         if (allianceHubRunning) {
@@ -91,11 +96,16 @@ public class Turret extends Subsystem{
         }
 
         if (sharedHubButton) {
-            sharedHubRunning = true;
             vMotor.setTargetPosition(750);
             vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             vMotor.setPower(1);
+            allianceHubRunning = false;
+            allianceHubButton = false;
+            sharedHubRunning = true;
             sharedHubButton = false;
+            raisingForRecenter = false;
+            turretRecenterRunning = false;
+            turretRecenter = false;
         }
 
         if (sharedHubRunning) {
@@ -126,18 +136,24 @@ public class Turret extends Subsystem{
         }
 
         if (turretRecenter) {
-            turretRecenterRunning = true;
             if (vMotor.getCurrentPosition() > 600) {
                 hMotor.setTargetPosition(0);
                 hMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 hMotor.setPower(1);
+                raisingForRecenter = false;
             } else {
                 vMotor.setTargetPosition(600);
                 vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 vMotor.setPower(1);
                 raisingForRecenter = true;
             }
+
+            allianceHubRunning = false;
+            allianceHubButton = false;
+            turretRecenterRunning = true;
             turretRecenter = false;
+            sharedHubRunning = false;
+            sharedHubButton = false;
         }
 
         if (turretRecenterRunning) {
@@ -150,14 +166,14 @@ public class Turret extends Subsystem{
                 hMotor.setPower(1);
             }
 
-            if ((hMotor.getCurrentPosition() <= 250) && (hMotor.getCurrentPosition() >= -250) && !vMotor.isBusy()) {
+            if ((hMotor.getCurrentPosition() <= 250) && (hMotor.getCurrentPosition() >= -250)) {
                 vMotor.setTargetPosition(100);
                 vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 vMotor.setPower(1);
             }
 
             if (((hMotor.getCurrentPosition() < 30) && (hMotor.getCurrentPosition() > -30)) &&
-            (vMotor.getCurrentPosition() < 200)) {
+                (vMotor.getCurrentPosition() < 200)) {
                 resetStuff(0.0, 0.0);
             }
 
@@ -168,7 +184,7 @@ public class Turret extends Subsystem{
 
         if (!sharedHubRunning && !turretRecenterRunning && !allianceHubRunning) {
             if (vMotor.getCurrentPosition() < 450) {
-                if ((Math.abs(hMotor.getCurrentPosition()) > 700) || (Math.abs(hMotor.getCurrentPosition()) < 100)){
+                if ((Math.abs(hMotor.getCurrentPosition()) > 700) || (Math.abs(hMotor.getCurrentPosition()) < 115)){
                     hMotor.setPower(Math.pow(xPower, 3));
                 } else if ((hMotor.getCurrentPosition() > -700) && (hMotor.getCurrentPosition() < 0) && (xPower < 0)) {
                     hMotor.setPower(Math.pow(xPower, 3));
@@ -187,8 +203,11 @@ public class Turret extends Subsystem{
 
     private void resetStuff(double xPower, double yPower) {
         allianceHubRunning = false;
+        allianceHubButton = false;
         sharedHubRunning = false;
+        sharedHubButton = false;
         turretRecenterRunning = false;
+        turretRecenter = false;
         raisingForRecenter = false;
         hMotor.setPower(xPower);
         vMotor.setPower(yPower);
