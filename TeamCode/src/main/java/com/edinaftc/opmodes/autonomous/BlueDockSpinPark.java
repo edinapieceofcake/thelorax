@@ -38,6 +38,11 @@ public class BlueDockSpinPark extends LinearOpMode {
         frightFrenzy.freightFrenzyDetector.cx1 = 410;
         frightFrenzy.freightFrenzyDetector.cx2 = 730;
 
+        vm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         while (!isStarted()){
             g1.update();
             if (g1.y)
@@ -71,27 +76,22 @@ public class BlueDockSpinPark extends LinearOpMode {
             telemetry.addData("press right bumber to move dots right", "");
             telemetry.addData("location ", frightFrenzy.freightFrenzyDetector.getLocation());
             telemetry.addData("left dot location", frightFrenzy.freightFrenzyDetector.cx0);
-            telemetry.addData("l, m ,r",  "%f %f %f" , frightFrenzy.freightFrenzyDetector.left / 1000,
-                    frightFrenzy.freightFrenzyDetector.middle / 1000, frightFrenzy.freightFrenzyDetector.right / 1000);
-            telemetry.addData("l r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.leftR / 1000,
-                    frightFrenzy.freightFrenzyDetector.leftG / 1000, frightFrenzy.freightFrenzyDetector.leftB / 1000);
-            telemetry.addData("m r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.middleR / 1000,
-                    frightFrenzy.freightFrenzyDetector.middleG / 1000, frightFrenzy.freightFrenzyDetector.middleB / 1000);
-            telemetry.addData("r r, g, b", "%f %f %f", frightFrenzy.freightFrenzyDetector.rightR / 1000,
-                    frightFrenzy.freightFrenzyDetector.rightG / 1000, frightFrenzy.freightFrenzyDetector.rightB / 1000);
+            telemetry.addData("l r", "%f", frightFrenzy.freightFrenzyDetector.leftR / 1000);
+            telemetry.addData("m r", "%f", frightFrenzy.freightFrenzyDetector.middleR / 1000);
+            telemetry.addData("r r", "%f", frightFrenzy.freightFrenzyDetector.rightR / 1000);
             telemetry.update();
         }
 
         FreightFrenzyLocation location = frightFrenzy.freightFrenzyDetector.getLocation();
 
         if (isStopRequested()) return;
-
+//backside - towards spinner
         sleep(sleepTime);
         if (location == FreightFrenzyLocation.left) {
-            vmPosition = 1064;
-            hmPosition = 662;
-            xLocation = -19;
-            yLocation = 50;
+            vmPosition = 1028;
+            hmPosition = 500;
+            xLocation = -25.5;
+            yLocation = 41.5;
             sleepTime = 1000;
         } else if (location == FreightFrenzyLocation.middle){
             vmPosition = 1882;
@@ -107,12 +107,10 @@ public class BlueDockSpinPark extends LinearOpMode {
             sleepTime = 2250;
         }
 
-        vm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         vm.setTargetPosition(vmPosition);
         vm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         vm.setPower(.75);
         sleep(250);
-        hm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hm.setTargetPosition(hmPosition);
         hm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hm.setPower(.75);
@@ -133,11 +131,11 @@ public class BlueDockSpinPark extends LinearOpMode {
         vm.setTargetPosition(400);
 
         TrajectorySequence traj2 = drive.trajectorySequenceBuilder(new Pose2d(xLocation, yLocation, Math.toRadians(0)))
-                .strafeTo(new Vector2d(-62, 62))
+                .strafeTo(new Vector2d(-62, 64))
                 .build();
         drive.followTrajectorySequence(traj2);
 
-        spinner.setPower(.2);
+        spinner.setPower(.3);
         sleep(5000);
         spinner.setPower(0);
         TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d(-62, 62, Math.toRadians(0)))
