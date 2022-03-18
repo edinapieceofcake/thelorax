@@ -90,8 +90,8 @@ public class BlueDockSpinPark extends LinearOpMode {
         if (location == FreightFrenzyLocation.left) {
             vmPosition = 1028;
             hmPosition = 500;
-            xLocation = -25.5;
-            yLocation = 41.5;
+            xLocation = -24.5;
+            yLocation = 41;
             sleepTime = 1000;
         } else if (location == FreightFrenzyLocation.middle){
             vmPosition = 1882;
@@ -103,7 +103,7 @@ public class BlueDockSpinPark extends LinearOpMode {
             vmPosition = 2400;
             hmPosition = 740;
             xLocation = -18;
-            yLocation = 40;
+            yLocation = 39.5;
             sleepTime = 2250;
         }
 
@@ -138,11 +138,11 @@ public class BlueDockSpinPark extends LinearOpMode {
         spinner.setPower(.3);
         sleep(5000);
         spinner.setPower(0);
-        TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d(-62, 62, Math.toRadians(0)))
+        TrajectorySequence traj3 = drive.trajectorySequenceBuilder(new Pose2d(-62, 62.5, Math.toRadians(0)))
                 .strafeTo(new Vector2d(-63, 38))
                 .build();
         drive.followTrajectorySequence(traj3);
-        vm.setTargetPosition(0);
+        vm.setTargetPosition(150);
         sleep(500);
     }
 }

@@ -86,7 +86,7 @@ public class RedDockWarehouse extends LinearOpMode {
             vmPosition = 2188;
             hmPosition = -1334;
             xLocation = -2;
-            yLocation = -38;
+            yLocation = -37;
         }
 
         // low
@@ -134,11 +134,11 @@ public class RedDockWarehouse extends LinearOpMode {
                 .strafeTo(new Vector2d(12, -66.5))
                 .forward(10)
                 .addTemporalMarker(() -> {
-                    vm.setTargetPosition(150);
+                    vm.setTargetPosition(135);
                     intake.setPower(.5);
                 })
                 .forward(20)
-                .addTemporalMarker(() -> vm.setTargetPosition(100))
+                .addTemporalMarker(() -> vm.setTargetPosition(125))
                 .forward(4)
                 .waitSeconds(.3)
                 .addTemporalMarker(() -> intake.setPower(0))
@@ -153,14 +153,14 @@ public class RedDockWarehouse extends LinearOpMode {
         trajectory = drive.trajectorySequenceBuilder(new Pose2d(46, -66.5, Math.toRadians(0)))
                 .addTemporalMarker(() -> hm.setTargetPosition(-1334))
                 .back(34)
-                .strafeTo(new Vector2d(0, -40))
+                .strafeTo(new Vector2d(-1, -38))
                 .addTemporalMarker(() -> intake.setPower(-.5))
                 .build();
 
         drive.followTrajectorySequence(trajectory);
 
         // the -2, -40 comes from the strafeto position
-        trajectory = drive.trajectorySequenceBuilder(new Pose2d(0, -40, Math.toRadians(0)))
+        trajectory = drive.trajectorySequenceBuilder(new Pose2d(-1, -38, Math.toRadians(0)))
                 .waitSeconds(.3)
                 .addTemporalMarker(() -> {
                     hm.setTargetPosition(0);
@@ -170,11 +170,11 @@ public class RedDockWarehouse extends LinearOpMode {
                 .strafeTo(new Vector2d(12, -66.5))
                 .forward(10)
                 .addTemporalMarker(() -> {
-                    vm.setTargetPosition(150);
+                    vm.setTargetPosition(135);
                     intake.setPower(.5);
                 })
                 .forward(22)
-                .addTemporalMarker(() -> vm.setTargetPosition(100))
+                .addTemporalMarker(() -> vm.setTargetPosition(125))
                 .forward(4)
                 .waitSeconds(.3)
                 .addTemporalMarker(() -> intake.setPower(0))
@@ -189,13 +189,13 @@ public class RedDockWarehouse extends LinearOpMode {
         trajectory = drive.trajectorySequenceBuilder(new Pose2d(48, -66.5, Math.toRadians(0)))
                 .addTemporalMarker(() -> hm.setTargetPosition(-1334))
                 .back(36)
-                .strafeTo(new Vector2d(0, -40))
+                .strafeTo(new Vector2d(-1, -38))
                 .addTemporalMarker(() -> intake.setPower(-.5))
                 .build();
 
         drive.followTrajectorySequence(trajectory);
 
-        trajectory = drive.trajectorySequenceBuilder(new Pose2d(-0, -40, Math.toRadians(0)))
+        trajectory = drive.trajectorySequenceBuilder(new Pose2d(-1, -38, Math.toRadians(0)))
                 .waitSeconds(.3)
                 .addTemporalMarker(() -> {
                     hm.setTargetPosition(0);
@@ -205,7 +205,7 @@ public class RedDockWarehouse extends LinearOpMode {
                 .forward(25)
                 .addTemporalMarker(() -> vm.setTargetPosition(200))
                 .strafeLeft(25)
-                .addTemporalMarker(() -> vm.setTargetPosition(0))
+                .addTemporalMarker(() -> vm.setTargetPosition(150))
                 .build();
 
         drive.followTrajectorySequence(trajectory);

@@ -146,7 +146,7 @@ public class RedDockSpinPark extends LinearOpMode {
                 .strafeTo(new Vector2d(-67, -38))
                 .build();
         drive.followTrajectorySequence(traj3);
-        vm.setTargetPosition(0);
+        vm.setTargetPosition(150);
         sleep(500);
     }
 }

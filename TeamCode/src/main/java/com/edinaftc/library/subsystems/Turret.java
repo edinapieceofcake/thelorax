@@ -167,13 +167,13 @@ public class Turret extends Subsystem{
             }
 
             if ((hMotor.getCurrentPosition() <= 250) && (hMotor.getCurrentPosition() >= -250)) {
-                vMotor.setTargetPosition(100);
+                vMotor.setTargetPosition(150);
                 vMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 vMotor.setPower(1);
             }
 
             if (((hMotor.getCurrentPosition() < 30) && (hMotor.getCurrentPosition() > -30)) &&
-                (vMotor.getCurrentPosition() < 200)) {
+                (vMotor.getCurrentPosition() < 175)) {
                 resetStuff(0.0, 0.0);
             }
 
